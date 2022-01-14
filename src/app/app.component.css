@@ -1,0 +1,85 @@
+:host {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 14px;
+    color: #333;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.toolbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    background-color: #1976d2;
+    color: white;
+    font-weight: 600;
+    justify-content: space-between;
+}
+
+.toolbar * {
+    margin: 0 16px;
+}
+
+.content {
+    display: flex;
+    margin: 82px auto 32px;
+    max-width: 960px;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    border-radius: 8px;
+    width: fit-content;
+    padding: 16px 50px;
+}
+
+.card{
+    margin: 32px;
+}
+
+.calendar{
+    display: flex;
+    align-items: center;
+    color: #1976d2;
+}
+
+h2 {
+    margin: 8px;
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+.open{
+    display: block;
+}
+
+.close{
+    display: none;
+}
+
+footer {
+    display: flex;
+    flex-direction: column;
+    margin-top: 300px;
+    align-items: center;
+    line-height: 20px;
+}
+
+footer a {
+    display: flex;
+    align-items: center;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 767px) {
+
+}
+@media screen and (max-width: 575px) {
+    
+}
