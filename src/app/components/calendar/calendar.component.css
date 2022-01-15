@@ -1,6 +1,39 @@
 .container{
+    box-sizing: border-box;
+    padding: 8px 32px;
+    min-width: 300px;
+    border-radius: 8px;
     position: absolute;
     box-shadow: 0px 0px 2px 0px;
     background-color: darkslateblue;
     color: white;
+}
+input{
+    border: none;
+    background: none;
+    border-bottom: solid 2px lightblue;
+    width: 100px;
+    padding: 8px;
+    margin: 8px;
+}
+input::placeholder{
+    color: white;
+}
+thead{
+    display: flex;
+}
+th, td{
+    width: 32px;
+}
+tbody{
+    display: block;
+    text-align: center;
+}
+label{
+    position: absolute;
+    top: 50px;
+    padding: 4px;
+    color: lightblue;
+    font-size: 10px;
+    background-color: darkslateblue;
 }

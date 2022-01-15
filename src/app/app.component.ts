@@ -8,4 +8,5 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'unblur Demo';
   isOPen = false;
+  // add hostlisten to parent to turn isopen false
 }

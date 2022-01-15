@@ -1,3 +1,51 @@
 <div class="container">
-    <pre> M T W T F S S</pre>
+    <h4>Filter by date</h4>
+    <form>
+        <label style="left: 50px;" for="dateFrom">From</label>
+        <input type="text" id="dateFrom" placeholder="dd/mm/yyyy">
+
+        <label style="left: 184px;" for="dateTo">To</label>
+        <input type="text" id="dateTo" placeholder="dd/mm/yyyy">
+
+        <div style="display: flex;justify-content: space-between;">
+            <span>{{cMonth |date:'MMMM'}} {{cYear}}</span>
+            
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="pointer"
+                    height="24px" viewBox="0 0 24 24" width="24px" fill="white"
+                    (click)="previous()">
+                    <path d="M0 0h24v24H0V0z" fill="none"/><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="pointer"
+                    height="24px" viewBox="0 0 24 24" width="24px" fill="white"
+                    (click)="next()">
+                    <path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg>
+            </div>
+        </div>
+        
+        <table>
+            <thead>
+            <tr *ngFor="let wd of weekDays, let i = index">
+                <th>{{wd}}</th>
+            </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let c of calendar; let i = index">
+                    <td>{{c[0]}}</td>
+                    <td>{{c[1]}}</td>
+                    <td>{{c[2]}}</td>
+                    <td>{{c[3]}}</td>
+                    <td>{{c[4]}}</td>
+                    <td>{{c[5]}}</td>
+                    <td>{{c[6]}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <footer style="display: flex;justify-content: end;">
+            <button style="margin: 6px;">Clear</button>
+            <button style="margin: 6px;">Apply</button>
+        </footer>
+
+    </form>
 </div>
