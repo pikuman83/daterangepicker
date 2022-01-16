@@ -23,10 +23,12 @@ input::placeholder{
 }
 thead{
     display: flex;
+    text-align: center;
 }
 th, td{
     width: 32px;
     height: 32px;
+    border-radius: 50%;
 }
 tbody{
     display: block;
@@ -45,18 +47,19 @@ label{
     cursor: default;
 }
 .circle{
-    border-radius: 50%;
     border: 0.5px solid lightgreen;
 }
 .selected{
-    border-radius: 50%;
+    box-sizing: border-box;
     background-color: aquamarine;
 }
 .focus-active{
-    border-top: white 1px;
-    border-bottom: white 1px;
+    background-color: aqua;
 }
-/* td:focus{
-    border-top: white 1px;
-    border-bottom: white 1px;
-} */
+.dates:hover{
+    box-sizing: border-box;
+    border: 0.5px solid ghostwhite;
+}
+.selectedCell{
+    background-color: blueviolet;
+}
