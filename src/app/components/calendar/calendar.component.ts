@@ -1,6 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
-
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -15,8 +14,8 @@ export class CalendarComponent implements OnInit {
   cYear = new Date().getFullYear();
   cMonth = new Date().getMonth();
   displayMonth!: Date;
-  dateFrom = '';
-  dateTo = '';
+  dateFrom!: Date|null;
+  dateTo!: Date|null;
   weekDays = ['M','T','W','T','F','S','S'];
   calendar: Array<Array<number>> = [];
   disable = false;
@@ -31,6 +30,7 @@ export class CalendarComponent implements OnInit {
   }
 
   createCalendar(year: number, month: number){
+    // Remember Selection
     this.calendar = [];
     this.cYear = year;
     this.cMonth = month;
@@ -114,53 +114,70 @@ export class CalendarComponent implements OnInit {
     return false
   }
 
-  selectDates(date: number){
-    if (this._isNotDisabled(date)){
+  clearFocus(){
+    const el = document.querySelectorAll('.dates');
+    Array.from(el).forEach(x => {
+      x.classList.remove('selectedCell')
+    })
+  }
+  // on dateto removal, clear selection before hover (if possible)
+  selectDates(date: number, row: number, e: any){
+    const el = e.target as HTMLTableCellElement;
+    if ((this.dateFrom && this.dateTo) || (!this.dateFrom && !this.dateTo)) this.clearFocus();
+    el.classList.add('selectedCell')
+    
+    if (!this.isDisable(row, date)){
       if (this.dateTo) {
-        this.dateTo = ''; 
-        this.dateFrom = '';
+        this.dateTo = null; 
+        this.dateFrom = null;
       }
       if (this.dateFrom){
-        if (this._isNotOldDate(this.dateFrom, date)){
-          this.dateTo = `${date < 10 ? 0 : ''}${date}/${this.cMonth < 9? 0: ''}${this.cMonth + 1}/${this.cYear}`;
+        if (this._isNotOldDate(date)){
+          this.dateTo = new Date(this.cYear, this.cMonth, date);
         }
       }
       else{
-        // focus element
-        this.dateFrom = `${date < 10 ? 0 : ''}${date}/${this.cMonth < 9? 0: ''}${this.cMonth + 1}/${this.cYear}`;
-        this.dateTo = '';
+        this.dateFrom = new Date(this.cYear, this.cMonth, date);
+        this.dateTo = null;
       }
     }
   }
 
-  _isNotDisabled(date: number){
-    const el = document.getElementsByClassName('gray');
-    let x = [];
-    for (let i = 0; i < 6; i++){
-      if (el[i].innerHTML !== date.toString()){
-        x.push(Number(el[i].innerHTML))
-      }
-    }  
-
-    if (!x.includes(date)){
-      return true
-    }
-    return false
-  }
-
-  _isNotOldDate(df: string, date: number): boolean {
-    const day = Number(df.substring(0,2));
-    const month = Number(df.substring(3,5));
-    const year = Number(df.substring(6,10));
-    const date1 = new Date(year, month - 1, day);
-    const date2 = new Date(this.cYear, this.cMonth, date);
-    if (date2 <= date1) return false;
+  _isNotOldDate(date: number): boolean {
+    const dateFrom = new Date(this.dateFrom!.getFullYear(), this.dateFrom!.getMonth() - 1, this.dateFrom!.getDate());
+    const newDate = new Date(this.cYear, this.cMonth, date);
+    if (newDate <= dateFrom) return false;
     return true
+  }
+
+  isRange(row: number, date: number): void{
+    if (!this.isDisable(row, date)){
+      if (this.dateFrom && this._isNotOldDate(date) && !this.dateTo){
+        const el = document.querySelectorAll('.dates');
+        for (let i = 0; i < el.length; i++){
+          const index = Number(el[i].innerHTML);
+          if (index === date && date >= date){
+            this._hightlight(date);
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  _hightlight(end: number){
+    const el = document.querySelectorAll('.dates');
+    for (let i = 0; i < el.length; i++){
+      el[i].classList.remove('focus-active');
+      const index = Number(el[i].innerHTML);
+      if (new Date(this.cYear, this.cMonth, index) >= this.dateFrom! && index <= end){
+        if(!el[i].classList.contains('gray'))
+        el[i].classList.add('focus-active')
+      }
+    }
   }
 
 }
 
-// add the selection border to dates once datefrom
-// once the second date is selected, change bg and wait for apply or clear?
-// clear clears the selected date variables
 // apply emit the event to parent, which populates the data and ask to send it through email.
+// 3rd click on selection or second to previous dates? test behaviours
