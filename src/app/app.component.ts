@@ -9,4 +9,8 @@ export class AppComponent {
   title = 'unblur Demo';
   isOPen = false;
   // add hostlisten to parent to turn isopen false
+  abc(e: any){
+    // e.pipe(first()).subscribe((x:any) => console.log(x))
+    console.log('event received',e)
+  }
 }

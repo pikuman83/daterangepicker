@@ -1,3 +1,4 @@
+/* reduce padding for responsive behaviour */
 .container{
     box-sizing: border-box;
     padding: 8px 32px;
@@ -15,6 +16,7 @@ input{
     width: 100px;
     padding: 8px;
     margin: 8px;
+    color: white;
 }
 input::placeholder{
     color: white;
@@ -24,6 +26,7 @@ thead{
 }
 th, td{
     width: 32px;
+    height: 32px;
 }
 tbody{
     display: block;
@@ -37,3 +40,23 @@ label{
     font-size: 10px;
     background-color: darkslateblue;
 }
+.gray{
+    color: gray;
+    cursor: default;
+}
+.circle{
+    border-radius: 50%;
+    border: 0.5px solid lightgreen;
+}
+.selected{
+    border-radius: 50%;
+    background-color: aquamarine;
+}
+.focus-active{
+    border-top: white 1px;
+    border-bottom: white 1px;
+}
+/* td:focus{
+    border-top: white 1px;
+    border-bottom: white 1px;
+} */

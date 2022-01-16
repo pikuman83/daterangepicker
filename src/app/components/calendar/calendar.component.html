@@ -2,13 +2,13 @@
     <h4>Filter by date</h4>
     <form>
         <label style="left: 50px;" for="dateFrom">From</label>
-        <input type="text" id="dateFrom" placeholder="dd/mm/yyyy">
+        <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" [value]="dateFrom" readonly>
 
         <label style="left: 184px;" for="dateTo">To</label>
-        <input type="text" id="dateTo" placeholder="dd/mm/yyyy">
+        <input type="text" id="dateTo" placeholder="dd/mm/yyyy" [value]="dateTo" readonly>
 
         <div style="display: flex;justify-content: space-between;">
-            <span>{{cMonth |date:'MMMM'}} {{cYear}}</span>
+            <span>{{displayMonth |date:'MMMM'}} {{cYear}}</span>
             
             <div>
                 <svg xmlns="http://www.w3.org/2000/svg" class="pointer"
@@ -29,23 +29,57 @@
             </tr>
             </thead>
 
-            <tbody>
+            <tbody class="pointer">
                 <tr *ngFor="let c of calendar; let i = index">
-                    <td>{{c[0]}}</td>
-                    <td>{{c[1]}}</td>
-                    <td>{{c[2]}}</td>
-                    <td>{{c[3]}}</td>
-                    <td>{{c[4]}}</td>
-                    <td>{{c[5]}}</td>
-                    <td>{{c[6]}}</td>
+                    <td [class.gray]="isDisable(i, c[0])" 
+                        [class.circle]="today(c[0])"
+                        [class.focus-active]="dateFrom" 
+                        (click)="selectDates(c[0])">
+                        {{c[0]}}
+                    </td>
+                    <td [class.gray]="isDisable(i, c[1])" 
+                        [class.circle]="today(c[1])"
+                        [class.focus-active]="dateFrom"
+                        (click)="selectDates(c[1])">
+                        {{c[1]}}
+                    </td>
+                    <td [class.gray]="isDisable(i, c[2])" 
+                        [class.circle]="today(c[2])"
+                        [class.focus-active]="dateFrom"
+                        (click)="selectDates(c[2])">
+                        {{c[2]}}
+                    </td>
+                    <td [class.gray]="isDisable(i, c[3])" 
+                        [class.circle]="today(c[3])"
+                        [class.focus-active]="dateFrom"
+                        (click)="selectDates(c[3])">
+                        {{c[3]}}
+                    </td>
+                    <td [class.gray]="isDisable(i, c[4])" 
+                        [class.circle]="today(c[4])"
+                        [class.focus-active]="dateFrom"
+                        (click)="selectDates(c[4])">
+                        {{c[4]}}
+                    </td>
+                    <td [class.gray]="isDisable(i, c[5])" 
+                        [class.circle]="today(c[5])"
+                        [class.focus-active]="dateFrom"
+                        (click)="selectDates(c[5])">
+                        {{c[5]}}
+                    </td>
+                    <td [class.gray]="isDisable(i, c[6])" 
+                        [class.circle]="today(c[6])"
+                        [class.focus-active]="dateFrom"
+                        (click)="selectDates(c[6])">
+                        {{c[6]}}
+                    </td>
                 </tr>
             </tbody>
         </table>
 
-        <footer style="display: flex;justify-content: end;">
-            <button style="margin: 6px;">Clear</button>
-            <button style="margin: 6px;">Apply</button>
-        </footer>
-
     </form>
+    <footer style="display: flex;justify-content: end;">
+        <button style="margin: 6px;" (click)="dateFrom='';dateTo=''">Clear</button>
+        <button style="margin: 6px;" (click)="abcd()">Apply</button>
+    </footer>
 </div>

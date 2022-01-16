@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+
 
 @Component({
   selector: 'app-calendar',
@@ -10,29 +10,31 @@ import { DatePipe } from '@angular/common';
 })
 export class CalendarComponent implements OnInit {
   
-  today = new Date();
+  @Output() newItemEvent = new EventEmitter<any>();
+  
   cYear = new Date().getFullYear();
-  cMonth = new Date();
-  weekDays = ['M','T','W','T','F','S','S'];
+  cMonth = new Date().getMonth();
+  displayMonth!: Date;
   dateFrom = '';
-  dateTo = ''
+  dateTo = '';
+  weekDays = ['M','T','W','T','F','S','S'];
   calendar: Array<Array<number>> = [];
-
-  currentMonth(month: number){
-    return this.datePipe.transform(month,'MMMM')
+  disable = false;
+  
+  constructor() { }
+  abcd(){
+    this.newItemEvent.emit({dF: this.dateFrom, dT: this.dateTo})
   }
-  constructor(private datePipe: DatePipe) { }
 
   ngOnInit(): void {
-    this.createCalendar(this.cYear, this.cMonth.getMonth());
-    const x = new Date().getDay();
-    console.log(x)
+    this.createCalendar(this.cYear, this.cMonth);
   }
 
   createCalendar(year: number, month: number){
     this.calendar = [];
-    this.cMonth = new Date(year, month);
     this.cYear = year;
+    this.cMonth = month;
+    this.displayMonth = new Date(year, month); //because date pipe doesn't detect changes on this.cMonth update
     const weekDay = new Date(year, month).getDay(); //  - 6 (Monday - Sunday)
     const numbreOfdays= this.daysInMonth(year, month); //return current and previous months total number of days
     const startingPoint = this.getStartingPoint(weekDay, numbreOfdays.lastMonth); 
@@ -40,9 +42,11 @@ export class CalendarComponent implements OnInit {
     for (let x = 0; x < 6; x++) {
       let row = [];
       for (let y = 0; y < 7; y++){
-        if (date > numbreOfdays.currentMonth) date = 1;
+        if (date > numbreOfdays.currentMonth) {
+          date = 1; //restart date after current month
+        }
         if (x === 0 && y === 0){
-       row.push(startingPoint.start)
+          row.push(startingPoint.start);
         }
         else if (x === 0 && y > 0 && y < startingPoint.wd + 1){
           row.push(startingPoint.start + y)
@@ -84,23 +88,79 @@ export class CalendarComponent implements OnInit {
   }
 
   next() {
-    this.cYear = this.cMonth.getMonth() === 11 ? this.cYear + 1 : this.cYear;
-    this.cMonth = new Date(this.cYear, (this.cMonth.getMonth() + 1) % 12);
-    this.createCalendar(this.cYear, this.cMonth.getMonth());
+    this.cYear = this.cMonth === 11 ? this.cYear + 1 : this.cYear;
+    this.cMonth = (this.cMonth + 1) % 12;
+    this.createCalendar(this.cYear, this.cMonth);
   }
 
   previous() {
-    this.cYear = this.cMonth.getMonth() === 0 ? this.cYear - 1 : this.cYear;
-    this.cMonth = this.cMonth.getMonth() === 0 ? new Date(this.cYear, 11) : new Date(this.cYear, this.cMonth.getMonth() - 1);
-    this.createCalendar(this.cYear, this.cMonth.getMonth());
+    this.cYear = this.cMonth === 0 ? this.cYear - 1 : this.cYear;
+    this.cMonth = this.cMonth === 0 ? 11 : this.cMonth - 1;
+    this.createCalendar(this.cYear, this.cMonth);
+  }
+
+  // add this to the following if disable previous dates is required
+  // const date1 = new Date(this.cYear, this.cMonth, date);
+  // if (date1 < new Date()) return true;
+  isDisable(row: number, date: number): boolean{
+    if (row === 0 && date > 7) return true;
+    if ((row === 4 || row === 5) && date < 20) return true;
+    return false
+  }
+
+  today(date: any): boolean{
+    const today = new Date();
+    if (today.getDate() === date && today.getFullYear() === this.cYear && today.getMonth() === this.cMonth) return true;
+    return false
+  }
+
+  selectDates(date: number){
+    if (this._isNotDisabled(date)){
+      if (this.dateTo) {
+        this.dateTo = ''; 
+        this.dateFrom = '';
+      }
+      if (this.dateFrom){
+        if (this._isNotOldDate(this.dateFrom, date)){
+          this.dateTo = `${date < 10 ? 0 : ''}${date}/${this.cMonth < 9? 0: ''}${this.cMonth + 1}/${this.cYear}`;
+        }
+      }
+      else{
+        // focus element
+        this.dateFrom = `${date < 10 ? 0 : ''}${date}/${this.cMonth < 9? 0: ''}${this.cMonth + 1}/${this.cYear}`;
+        this.dateTo = '';
+      }
+    }
+  }
+
+  _isNotDisabled(date: number){
+    const el = document.getElementsByClassName('gray');
+    let x = [];
+    for (let i = 0; i < 6; i++){
+      if (el[i].innerHTML !== date.toString()){
+        x.push(Number(el[i].innerHTML))
+      }
+    }  
+
+    if (!x.includes(date)){
+      return true
+    }
+    return false
+  }
+
+  _isNotOldDate(df: string, date: number): boolean {
+    const day = Number(df.substring(0,2));
+    const month = Number(df.substring(3,5));
+    const year = Number(df.substring(6,10));
+    const date1 = new Date(year, month - 1, day);
+    const date2 = new Date(this.cYear, this.cMonth, date);
+    if (date2 <= date1) return false;
+    return true
   }
 
 }
-  // the result of getmonthdays keep highlighted (with exception of currentmonth) taking the base as (1)
-  // highlight todays date and disable previous
-  // get index of the selected day to run the formula of building the date
-  // once their is 1st selected date, disable all previous and add the selection border to the next ones
-  // once the second date is selected, change bg and disable the rest and wait for apply or clear?
-  // or do not disable, next click selects the first date again from 1st day available
-  // clear clears the selected date variables
-  // apply emit the event to parent, which populates the data and ask to send it through email.
+
+// add the selection border to dates once datefrom
+// once the second date is selected, change bg and wait for apply or clear?
+// clear clears the selected date variables
+// apply emit the event to parent, which populates the data and ask to send it through email.
