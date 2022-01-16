@@ -1,16 +1,19 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { GlobalService } from 'src/app/global.service';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.css'],
   // changeDetection: ChangeDetectionStrategy.OnPush
-  // encapsulation: ViewEncapsulation.ShadowDom
+  // encapsulation: ViewEncapsulation.None
 })
 export class CalendarComponent implements OnInit {
   
-  @Output() newItemEvent = new EventEmitter<any>();
+  @Output() hideEvent = new EventEmitter<boolean>();
+  @Output() datesEvent = new EventEmitter<any>();
   
+  hide = false;
   cYear = new Date().getFullYear();
   cMonth = new Date().getMonth();
   displayMonth!: Date;
@@ -20,9 +23,8 @@ export class CalendarComponent implements OnInit {
   calendar: Array<Array<number>> = [];
   disable = false;
   
-  constructor() { }
-  abcd(){
-    this.newItemEvent.emit({dF: this.dateFrom, dT: this.dateTo})
+  constructor(public service: GlobalService) {
+    service.popUp.subscribe(hide => this.hide = hide)
   }
 
   ngOnInit(): void {
@@ -30,7 +32,7 @@ export class CalendarComponent implements OnInit {
   }
 
   createCalendar(year: number, month: number){
-    // Remember Selection
+    
     this.calendar = [];
     this.cYear = year;
     this.cMonth = month;
@@ -91,12 +93,22 @@ export class CalendarComponent implements OnInit {
     this.cYear = this.cMonth === 11 ? this.cYear + 1 : this.cYear;
     this.cMonth = (this.cMonth + 1) % 12;
     this.createCalendar(this.cYear, this.cMonth);
+    if(this.dateFrom){
+      // Remember Selection state
+      // if dateto and dateto monthyear lower than this, select all from datefrom (if df belongs to this)
+      // else if dateto = current month, select untill dateto
+    }
   }
 
   previous() {
     this.cYear = this.cMonth === 0 ? this.cYear - 1 : this.cYear;
     this.cMonth = this.cMonth === 0 ? 11 : this.cMonth - 1;
     this.createCalendar(this.cYear, this.cMonth);
+    if(this.dateFrom){
+      // Remember Selection state
+      // if dateto and dateto monthyear higher than this, select all from datefrom (if df belongs to this)
+      // else dateto = current month, select untill dateto
+    }
   }
 
   // add this to the following if disable previous dates is required
@@ -120,16 +132,28 @@ export class CalendarComponent implements OnInit {
       x.classList.remove('selectedCell')
     })
   }
-  // on dateto removal, clear selection before hover (if possible)
-  selectDates(date: number, row: number, e: any){
-    const el = e.target as HTMLTableCellElement;
-    if ((this.dateFrom && this.dateTo) || (!this.dateFrom && !this.dateTo)) this.clearFocus();
-    el.classList.add('selectedCell')
-    
+  
+  selectDates(date: number, row: number, e: any){    
     if (!this.isDisable(row, date)){
+      const el = e.target as HTMLTableCellElement;
+      if ((this.dateFrom && this.dateTo) || (!this.dateFrom && !this.dateTo)) this.clearFocus();
+      if(!this.dateFrom){
+        el.classList.add('selectedCell');
+
+      }
+      if (this.dateFrom){
+        if(this._isNotOldDate(date)){
+          el.classList.add('selectedCell');
+        };
+      }
+      
       if (this.dateTo) {
         this.dateTo = null; 
         this.dateFrom = null;
+        const el = document.querySelectorAll('.dates');
+        Array.from(el).forEach(x => {
+          x.classList.remove('focus-active')
+        })
       }
       if (this.dateFrom){
         if (this._isNotOldDate(date)){
@@ -178,6 +202,4 @@ export class CalendarComponent implements OnInit {
   }
 
 }
-
-// apply emit the event to parent, which populates the data and ask to send it through email.
-// 3rd click on selection or second to previous dates? test behaviours
+//check behaviour, select old date, focus olddate

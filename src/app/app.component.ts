@@ -1,4 +1,9 @@
 import { Component } from '@angular/core';
+import { GlobalService } from './global.service';
+export type DateRange = {
+  dF: Date,
+  dT: Date
+}
 
 @Component({
   selector: 'app-root',
@@ -8,9 +13,14 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'unblur Demo';
   isOPen = false;
+  hide = false;
+
+  constructor(public service: GlobalService){
+    service.popUp.subscribe(close => this.hide = close)
+  }
+
   // add hostlisten to parent to turn isopen false
-  abc(e: any){
-    // e.pipe(first()).subscribe((x:any) => console.log(x))
-    console.log('event received',e)
+  abc(dateRange: DateRange){
+    console.log(dateRange.dF, dateRange.dT)
   }
 }
