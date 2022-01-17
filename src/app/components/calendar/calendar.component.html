@@ -1,21 +1,26 @@
 <div class="container" [class.hide]="hide">
     <div class="topBar">
+
         <span>Filter by date</span>
-        <!-- <img src="../../../assets/close_big.png" width="14px" height="14px" alt="Close button"
-            class="pointer closeBtn" (click)="service.popUp.next(true)"> -->
 
         <svg width="14" height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg"
-            class="pointer closeBtn" (click)="service.popUp.next(true)">
+            class="pointer closeBtn" (click)="service.popUp.next(true);abc()">
             <path d="M13.295 0.705C12.9056 0.315639 12.2744 0.315639 11.885 0.705L7 5.59L2.115 0.705C1.72564 0.315639 1.09436 0.315639 0.705 0.705C0.315639 1.09436 0.315639 1.72564 0.705 2.115L5.59 7L0.705 11.885C0.315639 12.2744 0.315639 12.9056 0.705 13.295C1.09436 13.6844 1.72564 13.6844 2.115 13.295L7 8.41L11.885 13.295C12.2744 13.6844 12.9056 13.6844 13.295 13.295C13.6844 12.9056 13.6844 12.2744 13.295 11.885L8.41 7L13.295 2.115C13.6844 1.72564 13.6844 1.09436 13.295 0.705Z"/>
         </svg>
     </div>
     <form>
-        <div class="inputs">
-            <label style="left: 32px;" [class.hide]="!dateFrom" for="dateFrom">From</label>
-            <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" [value]="dateFrom|date:'dd/MM/y'" readonly>
 
-            <label style="left: 183px;" [class.hide]="!dateTo" for="dateTo">To</label>
-            <input type="text" id="dateTo" placeholder="dd/mm/yyyy" [value]="dateTo|date:'dd/MM/y'" readonly>
+        <!-- Fechas elegidas en readonly elements, uso de input para dejar la opcion 
+            de edición abierta, angular native date pipe para dar formato a las fechas -->
+
+        <div class="inputs">
+            <label [class]="!dateFrom" for="dateFrom">From</label>
+            <input type="text" placeholder="dd/mm/yyyy" 
+                [value]="dateFrom|date:'dd/MM/y'" [class.outline]="dateFrom" readonly>
+
+            <label [class.hide]="!dateTo" for="dateTo">To</label>
+            <input type="text" id="dateTo" placeholder="dd/mm/yyyy" 
+                [value]="dateTo|date:'dd/MM/y'" [class.outline]="dateTo" readonly>
         </div>  
 
         <div class="yearMonth">
@@ -89,8 +94,8 @@
         </table>
 
     </form>
-    <footer style="display: flex;justify-content: end;">
-        <button (click)="dateFrom=null;dateTo=null">Clear</button>
-        <button (click)="datesEvent.emit({dF:dateFrom, dT:dateTo})">Apply</button>
+    <footer>
+        <button (click)="clear()">Clear</button>
+        <button (click)="send()">Apply</button>
     </footer>
 </div>

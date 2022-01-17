@@ -4,12 +4,17 @@
     padding: 8px 24px;
     width: 300px;
     border-radius: 4px;
-    position: absolute;
-    box-shadow: 0px 0px 2px 0px;
+    position: relative;
+    top: -53px;
     background-color: var(--bg-color);
     color: white;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    transform: rotateX(0deg) !important; /* rotate 90deg means normal view, transform 0deg means invisible (the latter is used in the upcoming class) */
+    transition: all .2s ease 0s; /* the effect, pushe it (push bcoz of transporm origin, this is just the motion strategy, contains no effect) towards the new position slowly */
+    transform-origin: 100% 0 0; /* makes the transition starts from thee origin*/
+    z-index: 1;
 }
+
 .topBar{
     display: flex;
     align-items: center;
@@ -21,21 +26,26 @@
     font-weight: normal;
     font-family: Poppins;
 }
+
 .closeBtn{
     fill: white;
 }
+
 .closeBtn:hover{
     fill: var(--main-color);
     width: 16px;
     height: 16px;
 }
+
 .hide{
-    display: none;
+    transform: rotateX(90deg) !important;
 }
+
 .inputs{
     display: flex;
     justify-content: space-between;
 }
+
 input{
     border: none;
     background: none;
@@ -47,16 +57,42 @@ input{
     letter-spacing: 1px;
     margin: 14px 0;
     color: white;
+    padding: 10px 0;
 }
+
 input::placeholder{
     color: #8B8B8B;
     font-size: 14px;
     line-height: 22px;
 }
-input:hover{
-    outline: none !important;
+
+input:focus-visible{
+    outline: none;
+    border-bottom: solid 0.5px var(--main-color);
+}
+
+.outline{
+    outline: none;
     border-bottom: none;
     border: 0.5px solid var(--main-color);
+}
+
+label{
+    position: absolute;
+    top: 42px;
+    padding: 8px;
+    font-size: 12px;
+    line-height: 25px;
+    color: var(--main-color);
+    background-color: var(--bg-color);
+}
+
+label:first-child{
+    left: 32px;
+}
+
+label:nth-child(3){
+    left: 169px;
 }
 
 .yearMonth{
@@ -67,38 +103,23 @@ input:hover{
     line-height: 24px;
 }
 
-label{
-    position: absolute;
-    top: 42px;
-    padding: 4px; 
-    width: 32px;
-    height: 20px;
-    font-weight: normal;
-    font-size: 12px;
-    line-height: 20px;
-    display: flex;
-    align-items: center;
-    color: var(--main-color);
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-    background-color: var(--bg-color);
-}
-
 table{
     font-size: 13px;
     line-height: 19px;
 }
+
 thead{
     display: flex;
     text-align: center;
     color: var(--main-color);
 }
+
 th, td{
     width: 32px;
     height: 32px;
     border-radius: 50%;
 }
+
 tbody{
     display: block;
     text-align: center;
@@ -110,26 +131,30 @@ tbody{
     color: gray;
     cursor: default;
 }
-/* .circle{
+
+.circle{
+    box-sizing: border-box;
     border: 1px solid var(--main-color);
-} */
+}
+
 .selected{
     box-sizing: border-box;
     background-color: var(--main-color);
 }
+
 .focus-active{
     background: rgba(13, 191, 249, 0.2);
-    /* background: rgba(13 191 249 0.2); */
-
 }
+
 .dates:hover{
     box-sizing: border-box;
-    border-top: 0.5px solid white;
-    border-bottom: 0.5px solid white;
+    border: 1px solid var(--main-color);
 }
+
 .selectedCell{
     background-color: var(--main-color);
 }
+
 button{
     width: 50px;
     height: 21px;
@@ -142,4 +167,14 @@ button{
     background: none;
     line-height: 21px;
     margin: 8px 0;
+    cursor: pointer;
+}
+
+button:hover{
+    color: var(--main-color);
+}
+
+footer{
+    display: flex;
+    justify-content: flex-end;
 }

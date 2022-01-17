@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { GlobalService } from './global.service';
+
 export type DateRange = {
   dF: Date,
   dT: Date
@@ -13,7 +14,7 @@ export type DateRange = {
 export class AppComponent {
   title = 'unblur Demo';
   isOPen = false;
-  hide = false;
+  hide = true;
 
   constructor(public service: GlobalService){
     service.popUp.subscribe(close => this.hide = close)

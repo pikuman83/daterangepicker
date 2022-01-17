@@ -10,10 +10,9 @@ import { GlobalService } from 'src/app/global.service';
 })
 export class CalendarComponent implements OnInit {
   
-  @Output() hideEvent = new EventEmitter<boolean>();
   @Output() datesEvent = new EventEmitter<any>();
   
-  hide = false;
+  hide = true;;
   cYear = new Date().getFullYear();
   cMonth = new Date().getMonth();
   displayMonth!: Date;
@@ -24,11 +23,15 @@ export class CalendarComponent implements OnInit {
   disable = false;
   
   constructor(public service: GlobalService) {
-    service.popUp.subscribe(hide => this.hide = hide)
+    this.service.popUp.subscribe(hide => this.hide = hide)
   }
 
   ngOnInit(): void {
     this.createCalendar(this.cYear, this.cMonth);
+    console.log(this.hide)
+  }
+  abc(){
+    console.log('clicked',this.hide)
   }
 
   createCalendar(year: number, month: number){
@@ -199,6 +202,18 @@ export class CalendarComponent implements OnInit {
         el[i].classList.add('focus-active')
       }
     }
+  }
+
+  clear(){
+    this.dateFrom = null;
+    this.dateTo = null;
+    const el = document.querySelectorAll('.dates');
+    Array.from(el).forEach(e => e.classList.remove('focus-active', 'selectedCell'));
+  }
+
+  send(){
+    this.datesEvent.emit({dF:this.dateFrom, dT:this.dateTo});
+    this.service.popUp.next(true)
   }
 
 }
