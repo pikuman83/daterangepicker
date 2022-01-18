@@ -1,101 +1,50 @@
-<div class="container" [class.hide]="hide">
-    <div class="topBar">
+<!-- The main class 'container' which wrappes the full calendar, absolute position and offset may apply -->
+<div class="container" [class.close]="hide">
 
+    <div class="navBar">
         <span>Filter by date</span>
 
+        <!-- Close button svg-->
         <svg width="14" height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg"
-            class="pointer closeBtn" (click)="service.popUp.next(true);abc()">
+            class="pointer closeBtn" (click)="service.popUp.next(true)">
             <path d="M13.295 0.705C12.9056 0.315639 12.2744 0.315639 11.885 0.705L7 5.59L2.115 0.705C1.72564 0.315639 1.09436 0.315639 0.705 0.705C0.315639 1.09436 0.315639 1.72564 0.705 2.115L5.59 7L0.705 11.885C0.315639 12.2744 0.315639 12.9056 0.705 13.295C1.09436 13.6844 1.72564 13.6844 2.115 13.295L7 8.41L11.885 13.295C12.2744 13.6844 12.9056 13.6844 13.295 13.295C13.6844 12.9056 13.6844 12.2744 13.295 11.885L8.41 7L13.295 2.115C13.6844 1.72564 13.6844 1.09436 13.295 0.705Z"/>
         </svg>
     </div>
-    <form>
 
-        <!-- Fechas elegidas en readonly elements, uso de input para dejar la opcion 
-            de edición abierta, angular native date pipe para dar formato a las fechas -->
+    <!-- Readonly input elements to show selected dates with angular native date pipe,
+        Input elements are chosen to leave the edit option open for future use,
+        2 way data binding and validations should apply -->
+    <div class="inputs">
+        <label [class.hide]="!dateFrom" for="dateFrom">From</label>
+        <input type="text" placeholder="dd/mm/yyyy" 
+            [value]="dateFrom|date:'dd/MM/y'" [class.outline]="dateFrom" readonly>
 
-        <div class="inputs">
-            <label [class]="!dateFrom" for="dateFrom">From</label>
-            <input type="text" placeholder="dd/mm/yyyy" 
-                [value]="dateFrom|date:'dd/MM/y'" [class.outline]="dateFrom" readonly>
+        <label [class.hide]="!dateTo" for="dateTo">To</label>
+        <input type="text" id="dateTo" placeholder="dd/mm/yyyy" 
+            [value]="dateTo|date:'dd/MM/y'" [class.outline]="dateTo" readonly>
+    </div>  
 
-            <label [class.hide]="!dateTo" for="dateTo">To</label>
-            <input type="text" id="dateTo" placeholder="dd/mm/yyyy" 
-                [value]="dateTo|date:'dd/MM/y'" [class.outline]="dateTo" readonly>
-        </div>  
-
-        <div class="yearMonth">
-            
-            <span>{{displayMonth |date:'MMMM'}} {{cYear}}</span>
-            
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="pointer"
-                    height="24px" viewBox="0 0 24 24" width="24px" fill="white" (click)="previous()">
-                    <path d="M0 0h24v24H0V0z" fill="none"/><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z"/></svg>
-                <svg xmlns="http://www.w3.org/2000/svg" class="pointer"
-                    height="24px" viewBox="0 0 24 24" width="24px" fill="white"
-                    (click)="next()">
-                    <path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg>
-            </div>
-        </div>
+    <div class="yearMonth">
+        <span>{{displayMonth |date:'MMMM'}} {{cYear}}</span>
         
-        <table>
-            <thead>
-            <tr>
-                <th *ngFor="let wd of weekDays">{{wd}}</th>
-            </tr>
-            </thead>
+        <!-- Next and previous buttons svgs -->
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="pointer"
+                height="24px" viewBox="0 0 24 24" width="24px" fill="white" (click)="previous()">
+                <path d="M0 0h24v24H0V0z" fill="none"/><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="pointer"
+                height="24px" viewBox="0 0 24 24" width="24px" fill="white" (click)="next()">
+                <path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg>
+        </div>
+    </div>
 
-            <tbody class="pointer">
-                <tr *ngFor="let c of calendar; let i = index">
-                    <td class="dates" [class.gray]="isDisable(i, c[0])" 
-                        [class.circle]="today(c[0])"
-                        (click)="selectDates(c[0], i, $event)"
-                        (mouseover)="isRange(i, c[0])">
-                        {{c[0]}}
-                    </td>
-                    <td class="dates" [class.gray]="isDisable(i, c[1])" 
-                        [class.circle]="today(c[1])"
-                        (click)="selectDates(c[1], i, $event)"
-                        (mouseover)="isRange(i, c[1])">
-                        {{c[1]}}
-                    </td>
-                    <td class="dates" [class.gray]="isDisable(i, c[2])" 
-                        [class.circle]="today(c[2])"
-                        (click)="selectDates(c[2], i, $event)"
-                        (mouseover)="isRange(i, c[2])">
-                        {{c[2]}}
-                    </td>
-                    <td class="dates" [class.gray]="isDisable(i, c[3])" 
-                        [class.circle]="today(c[3])"
-                        (click)="selectDates(c[3], i, $event)"
-                        (mouseover)="isRange(i, c[3])">
-                        {{c[3]}}
-                    </td>
-                    <td class="dates" [class.gray]="isDisable(i, c[4])" 
-                        [class.circle]="today(c[4])"
-                        (click)="selectDates(c[4], i, $event)"
-                        (mouseover)="isRange(i, c[4])">
-                        {{c[4]}}
-                    </td>
-                    <td class="dates" [class.gray]="isDisable(i, c[5])" 
-                        [class.circle]="today(c[5])"
-                        (click)="selectDates(c[5], i, $event)"
-                        (mouseover)="isRange(i, c[5])">
-                        {{c[5]}}
-                    </td>
-                    <td class="dates" [class.gray]="isDisable(i, c[6])" 
-                        [class.circle]="today(c[6])"
-                        (click)="selectDates(c[6], i, $event)"
-                        (mouseover)="isRange(i, c[6])">
-                        {{c[6]}}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <!-- Calendar body component, accepts the calendar variable to populate the calendar -->
+    <app-calendar-body [calendar]="calendar"></app-calendar-body>
 
-    </form>
+    <!-- buttons positioned to flex-end -->
     <footer>
         <button (click)="clear()">Clear</button>
-        <button (click)="send()">Apply</button>
+        <button (click)="sendToParent()">Apply</button>
     </footer>
+
 </div>

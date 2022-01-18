@@ -1,0 +1,65 @@
+table{
+    font-size: 13px;
+    line-height: 19px;
+    border-spacing: 0;
+}
+
+thead{
+    display: flex;
+    text-align: center;
+    color: var(--main-color);
+}
+
+th, td{
+    width: 32px;
+    height: 32px;
+    /* border-radius: 50%; */
+}
+
+tbody{
+    display: block;
+    text-align: center;
+    font-size: 11px;
+    line-height: 16px;
+}
+
+.inactive{
+    color: gray;
+    cursor: default;
+}
+
+.circle{
+    box-sizing: border-box;
+    border: 1px solid var(--main-color);
+    border-radius: 50%;
+}
+
+.selected{
+    box-sizing: border-box;
+    background-color: var(--main-color);
+    border-radius: 50%;
+}
+
+.focus-active{
+    background: rgba(13, 191, 249, 0.2);
+}
+
+.dates:hover{
+    box-sizing: border-box;
+    border: 1px solid var(--main-color);
+}
+
+.abcde{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    box-sizing: border-box;
+}
+
+.selectedCell{
+    background-color: var(--main-color);
+    border-radius: 50%;
+}

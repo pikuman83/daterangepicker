@@ -1,48 +1,100 @@
-import { Component, EventEmitter, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { GlobalService } from 'src/app/global.service';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.css'],
-  // changeDetection: ChangeDetectionStrategy.OnPush
-  // encapsulation: ViewEncapsulation.None
+  styleUrls: ['./calendar.component.css']
 })
 export class CalendarComponent implements OnInit {
-  
-  @Output() datesEvent = new EventEmitter<any>();
-  
-  hide = true;;
-  cYear = new Date().getFullYear();
-  cMonth = new Date().getMonth();
-  displayMonth!: Date;
-  dateFrom!: Date|null;
-  dateTo!: Date|null;
-  weekDays = ['M','T','W','T','F','S','S'];
-  calendar: Array<Array<number>> = [];
-  disable = false;
-  
+
+  @Output() datesEvent = new EventEmitter<any>(); // Emit the selected dates to the app component
+  hide = true; //bound to child component through service, closes the calendar
+  cYear = new Date().getFullYear(); //keep track of the current year
+  cMonth = new Date().getMonth(); //keep track of the current month
+  displayMonth!: Date; // value is given on calendar generation
+  dateFrom!: Date|null; // bound to other components through service
+  dateTo!: Date|null; // bound to other components through service
+  calendar: Array<Array<number>> = []; //calendar body array (contains all the dates)
+
+  // injects the service holding "Rxjs subjects" to handle app state
   constructor(public service: GlobalService) {
-    this.service.popUp.subscribe(hide => this.hide = hide)
+    service.popUp.subscribe(hide => this.hide = hide);
+    service.dateFrom.subscribe(dF => this.dateFrom = dF)
+    service.dateTo.subscribe(dT => this.dateTo = dT)
   }
 
   ngOnInit(): void {
-    this.createCalendar(this.cYear, this.cMonth);
-    console.log(this.hide)
-  }
-  abc(){
-    console.log('clicked',this.hide)
+    // initially creates calendar with current date
+    this.createCalendar(this.cYear, this.cMonth); 
+    // something strange is happening, the following formula returns next month total.
+    console.log(32 - new Date(2022, 1, 32).getDate())
   }
 
+  /**
+   * Main function, generate the calendar.
+   * @param year, number type value, initialized with current year, 
+   * later on provided by next() and previous() function.
+   * @param month, number type value, initialized with current year, 
+   * later on provided by next() and previous() function.
+   */
   createCalendar(year: number, month: number){
-    
+
     this.calendar = [];
     this.cYear = year;
     this.cMonth = month;
-    this.displayMonth = new Date(year, month); //because date pipe doesn't detect changes on this.cMonth update
-    const weekDay = new Date(year, month).getDay(); //  - 6 (Monday - Sunday)
-    const numbreOfdays= this.daysInMonth(year, month); //return current and previous months total number of days
-    const startingPoint = this.getStartingPoint(weekDay, numbreOfdays.lastMonth); 
+
+    //because 'datepipe' doesn't detect changes on this.cMonth update
+    this.displayMonth = new Date(year, month);
+    
+    // 0 - 6 (Monday - Sunday)
+    const weekDay = new Date(year, month).getDay();
+
+    //return current and previous months total number of days
+    const numbreOfdays= this._daysInMonth(year, month);
+
+    // Based on total days in last month and 1st weekday (Monday to sunday) of the current month,
+    // determines the entry point of the calendar 
+    const startingPoint = this._getStartingPoint(weekDay, numbreOfdays.lastMonth); 
+
+    // Fills the calendar variable in 6 rows of 7 dates each, through nested loop
+    this._buildCalendar(startingPoint, numbreOfdays);
+  }
+
+  /**
+   * check how many days in a month, adding 
+   * code partially taken from * https://dzone.com/articles/determining-number-days-month
+   * @param year : number
+   * @param month : number
+   * @returns an object with {total number of days in current month, and total number of days in last month}
+   */
+  _daysInMonth(year: number, month: number) {
+    const currentMonth = 32 - new Date(year, month, 32).getDate();
+    if (month === 0) {
+      month = 11
+      year -= 1;
+    }
+    else month -= 1;
+    const lastMonth = 32 - new Date(year, month, 32).getDate();
+      return {currentMonth, lastMonth}
+  }
+
+  _getStartingPoint(weekday: number, previousMonth: number){
+    let start = 0;
+    let wd = 0;
+    switch(weekday){
+      case(0): start = previousMonth - 5; wd = 5; break;
+      case(1): start = previousMonth - 6; wd = 6; break;
+      case(2): start = previousMonth - 0; wd = 0; break;
+      case(3): start = previousMonth - 1; wd = 1; break;
+      case(4): start = previousMonth - 2; wd = 2; break;
+      case(5): start = previousMonth - 3; wd = 3; break;
+      case(6): start = previousMonth - 4; wd = 4; break
+    }
+    return {start, wd};
+  }
+
+  _buildCalendar(startingPoint: any, numbreOfdays: any){
     let date = 1;
     for (let x = 0; x < 6; x++) {
       let row = [];
@@ -63,33 +115,6 @@ export class CalendarComponent implements OnInit {
       }
       this.calendar.push(row)
     }
-  }
-
-  // check how many days in a month code from https://dzone.com/articles/determining-number-days-month
-  daysInMonth(year: number, month: number) {
-    const currentMonth = 32 - new Date(year, month, 32).getDate();
-    if (month === 0) {
-      month = 11
-      year -= 1;
-    }
-    else month -= 1;
-    const lastMonth = 32 - new Date(year, month, 32).getDate();
-      return {currentMonth, lastMonth}
-  }
-
-  getStartingPoint(weekday: number, previousMonth: number){
-    let start = 0;
-    let wd = 0;
-    switch(weekday){
-      case(0): start = previousMonth - 5; wd = 5; break;
-      case(1): start = previousMonth - 6; wd = 6; break;
-      case(2): start = previousMonth - 0; wd = 0; break;
-      case(3): start = previousMonth - 1; wd = 1; break;
-      case(4): start = previousMonth - 2; wd = 2; break;
-      case(5): start = previousMonth - 3; wd = 3; break;
-      case(6): start = previousMonth - 4; wd = 4; break
-    }
-    return {start, wd};
   }
 
   next() {
@@ -114,107 +139,23 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  // add this to the following if disable previous dates is required
-  // const date1 = new Date(this.cYear, this.cMonth, date);
-  // if (date1 < new Date()) return true;
-  isDisable(row: number, date: number): boolean{
-    if (row === 0 && date > 7) return true;
-    if ((row === 4 || row === 5) && date < 20) return true;
-    return false
-  }
-
-  today(date: any): boolean{
-    const today = new Date();
-    if (today.getDate() === date && today.getFullYear() === this.cYear && today.getMonth() === this.cMonth) return true;
-    return false
-  }
-
-  clearFocus(){
-    const el = document.querySelectorAll('.dates');
-    Array.from(el).forEach(x => {
-      x.classList.remove('selectedCell')
-    })
-  }
-  
-  selectDates(date: number, row: number, e: any){    
-    if (!this.isDisable(row, date)){
-      const el = e.target as HTMLTableCellElement;
-      if ((this.dateFrom && this.dateTo) || (!this.dateFrom && !this.dateTo)) this.clearFocus();
-      if(!this.dateFrom){
-        el.classList.add('selectedCell');
-
-      }
-      if (this.dateFrom){
-        if(this._isNotOldDate(date)){
-          el.classList.add('selectedCell');
-        };
-      }
-      
-      if (this.dateTo) {
-        this.dateTo = null; 
-        this.dateFrom = null;
-        const el = document.querySelectorAll('.dates');
-        Array.from(el).forEach(x => {
-          x.classList.remove('focus-active')
-        })
-      }
-      if (this.dateFrom){
-        if (this._isNotOldDate(date)){
-          this.dateTo = new Date(this.cYear, this.cMonth, date);
-        }
-      }
-      else{
-        this.dateFrom = new Date(this.cYear, this.cMonth, date);
-        this.dateTo = null;
-      }
-    }
-  }
-
-  _isNotOldDate(date: number): boolean {
-    const dateFrom = new Date(this.dateFrom!.getFullYear(), this.dateFrom!.getMonth() - 1, this.dateFrom!.getDate());
-    const newDate = new Date(this.cYear, this.cMonth, date);
-    if (newDate <= dateFrom) return false;
-    return true
-  }
-
-  isRange(row: number, date: number): void{
-    if (!this.isDisable(row, date)){
-      if (this.dateFrom && this._isNotOldDate(date) && !this.dateTo){
-        const el = document.querySelectorAll('.dates');
-        for (let i = 0; i < el.length; i++){
-          const index = Number(el[i].innerHTML);
-          if (index === date && date >= date){
-            this._hightlight(date);
-            break;
-          }
-        }
-      }
-    }
-  }
-
-  _hightlight(end: number){
-    const el = document.querySelectorAll('.dates');
-    for (let i = 0; i < el.length; i++){
-      el[i].classList.remove('focus-active');
-      const index = Number(el[i].innerHTML);
-      if (new Date(this.cYear, this.cMonth, index) >= this.dateFrom! && index <= end){
-        if(!el[i].classList.contains('gray'))
-        el[i].classList.add('focus-active')
-      }
-    }
-  }
-
   clear(){
-    this.dateFrom = null;
-    this.dateTo = null;
+    this.service.dateFrom.next(null);
+    this.service.dateTo.next(null);
     const el = document.querySelectorAll('.dates');
     Array.from(el).forEach(e => e.classList.remove('focus-active', 'selectedCell'));
   }
 
-  send(){
-    this.datesEvent.emit({dF:this.dateFrom, dT:this.dateTo});
-    this.service.popUp.next(true)
+
+  sendToParent(){
+    if (this.dateFrom && this.dateTo){
+      this.datesEvent.emit({dF:this.dateFrom, dT:this.dateTo});
+      this.service.popUp.next(true)
+    }
+    else{
+      // generate a notification component
+      // A div on the app component (with time to turn the variable false again) convocable through service from the whole app
+    }
   }
 
 }
-//check behaviour, select old date, focus olddate

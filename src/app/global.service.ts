@@ -7,5 +7,7 @@ import { Subject } from 'rxjs';
 export class GlobalService {
 
   public popUp = new Subject<boolean>();
-  
+  public dateFrom = new Subject<Date|null>();
+  public dateTo = new Subject<Date|null>();
+
 }
