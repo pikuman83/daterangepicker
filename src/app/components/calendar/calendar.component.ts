@@ -16,6 +16,7 @@ export class CalendarComponent implements OnInit {
   dateFrom!: Date|null; // bound to other components through service
   dateTo!: Date|null; // bound to other components through service
   calendar: Array<Array<number>> = []; //calendar body array (contains all the dates)
+  selectedDates = false;
 
   // injects the service holding "Rxjs subjects" to handle app state
   constructor(public service: GlobalService) {
@@ -25,10 +26,8 @@ export class CalendarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // initially creates calendar with current date
     this.createCalendar(this.cYear, this.cMonth); 
-    // something strange is happening, the following formula returns next month total.
-    console.log(32 - new Date(2022, 1, 32).getDate())
+    console.log(new Date() < new Date(2022, 0, 20))
   }
 
   /**
@@ -62,8 +61,10 @@ export class CalendarComponent implements OnInit {
   }
 
   /**
-   * check how many days in a month, adding 
-   * code partially taken from * https://dzone.com/articles/determining-number-days-month
+   * check how many days in a month, Logic => Creating date with 32 as day, returns the first dates of 
+   * the next month, i.e; 1st of februrary if we enquire for january, then eliminating 1 from it returns 
+   * 31 (january) and all the months work in this way successivly.
+   * code taken (partially) from * https://dzone.com/articles/determining-number-days-month
    * @param year : number
    * @param month : number
    * @returns an object with {total number of days in current month, and total number of days in last month}
@@ -118,24 +119,22 @@ export class CalendarComponent implements OnInit {
   }
 
   next() {
+    this.selectedDates = false;
     this.cYear = this.cMonth === 11 ? this.cYear + 1 : this.cYear;
-    this.cMonth = (this.cMonth + 1) % 12;
+    this.cMonth = (this.cMonth + 1) % 12; //remainder: limits the number under 12
     this.createCalendar(this.cYear, this.cMonth);
-    if(this.dateFrom){
-      // Remember Selection state
-      // if dateto and dateto monthyear lower than this, select all from datefrom (if df belongs to this)
-      // else if dateto = current month, select untill dateto
+    if(this.dateFrom && this.dateTo){
+      this.selectedDates = true;
     }
   }
 
   previous() {
+    this.selectedDates = false;
     this.cYear = this.cMonth === 0 ? this.cYear - 1 : this.cYear;
     this.cMonth = this.cMonth === 0 ? 11 : this.cMonth - 1;
     this.createCalendar(this.cYear, this.cMonth);
-    if(this.dateFrom){
-      // Remember Selection state
-      // if dateto and dateto monthyear higher than this, select all from datefrom (if df belongs to this)
-      // else dateto = current month, select untill dateto
+    if(this.dateFrom && this.dateTo){
+        this.selectedDates = true;
     }
   }
 
@@ -150,7 +149,8 @@ export class CalendarComponent implements OnInit {
   sendToParent(){
     if (this.dateFrom && this.dateTo){
       this.datesEvent.emit({dF:this.dateFrom, dT:this.dateTo});
-      this.service.popUp.next(true)
+      this.clear();
+      this.service.popUp.next(true);
     }
     else{
       // generate a notification component

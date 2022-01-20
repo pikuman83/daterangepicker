@@ -38,13 +38,17 @@
         </div>
     </div>
 
-    <!-- Calendar body component, accepts the calendar variable to populate the calendar -->
-    <app-calendar-body [calendar]="calendar"></app-calendar-body>
+    <app-calendar-body 
+        [calendar]="calendar" 
+        [selectedDates]="selectedDates"
+        [cYear]="cYear"
+        [cMonth]="cMonth">
+    </app-calendar-body>
 
-    <!-- buttons positioned to flex-end -->
+    <!-- buttons positioned to flex-end, ripple effect can be added to highlight click -->
     <footer>
         <button (click)="clear()">Clear</button>
-        <button (click)="sendToParent()">Apply</button>
+        <button (click)="sendToParent()" [class.inactive]="!dateTo">Apply</button>
     </footer>
 
 </div>

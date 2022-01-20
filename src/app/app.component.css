@@ -70,6 +70,7 @@ footer {
 footer a {
     display: flex;
     align-items: center;
+    font-size: 14px;
 }
 
 /* Responsive Styles */
