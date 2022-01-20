@@ -1,3 +1,5 @@
+<!-- Remember to fix mobile top bar height -->
+
 <!-- Toolbar -->
 <div class="toolbar" role="banner">
   <img width="100" alt="Unblur Logo" src="../assets/logo_b.png"/>
@@ -18,12 +20,29 @@
     
   </div>
 
-  <!-- <div class="card">
-    <pre>Title: </pre>
-    <pre>Description: </pre>
-    <pre>Email: </pre>
-    <span>Send</span>
-  </div> -->
+  <div class="card">
+    <input type="text" id="name" name="name" class="form-control"
+      required minlength="4" appForbiddenName="abc@abc.com"
+      [(ngModel)]="emailForm.email" #emailInput="ngModel">
+
+    <div *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)"class="alert">
+      <div *ngIf="emailInput.errors?.['required']">Name is required.</div>
+      <div *ngIf="emailInput.errors?.['minlength']">Name must be at least 4 characters long.</div>
+      <div *ngIf="emailInput.errors?.['forbiddenName']">Name cannot be Bob.</div>
+    </div>
+
+  <input type="text" id="name" name="name" class="form-control"
+    required minlength="4" appForbiddenName="abc@abc.com"
+    [(ngModel)]="emailForm.notes" #notesInput="ngModel">
+
+    <div *ngIf="notesInput.invalid && (notesInput.dirty || notesInput.touched)"class="alert">
+      <div *ngIf="notesInput.errors?.['required']">Name is required.</div>
+      <div *ngIf="notesInput.errors?.['minlength']">Name must be at least 4 characters long.</div>
+      <div *ngIf="notesInput.errors?.['forbiddenName']">Name cannot be Bob.</div>
+    </div>
+  </div>
+  <button (click)="xyz()">Cancel</button>
+  <button (click)="xyz()" [disabled]="emailInput.invalid || notesInput.invalid">Send</button>
 
   <footer>
 
@@ -36,4 +55,12 @@
 
 </div>
 
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * !-->
+<div class="notify" *ngIf="notification">
+  <span class="notification">{{notification}}</span>
+  
+  <!-- Close button svg-->
+  <svg width="14" height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg"
+    class="pointer closeBtn" (click)="service.notify.next('')">
+    <path d="M13.295 0.705C12.9056 0.315639 12.2744 0.315639 11.885 0.705L7 5.59L2.115 0.705C1.72564 0.315639 1.09436 0.315639 0.705 0.705C0.315639 1.09436 0.315639 1.72564 0.705 2.115L5.59 7L0.705 11.885C0.315639 12.2744 0.315639 12.9056 0.705 13.295C1.09436 13.6844 1.72564 13.6844 2.115 13.295L7 8.41L11.885 13.295C12.2744 13.6844 12.9056 13.6844 13.295 13.295C13.6844 12.9056 13.6844 12.2744 13.295 11.885L8.41 7L13.295 2.115C13.6844 1.72564 13.6844 1.09436 13.295 0.705Z"/>
+  </svg>
+</div>

@@ -29,15 +29,6 @@
     font-family: Poppins;
 }
 
-.closeBtn{
-    fill: white;
-}
-
-.closeBtn:hover{
-    fill: var(--main-color);
-    width: 16px;
-    height: 16px;
-}
 .inputs{
     display: flex;
     justify-content: space-between;
