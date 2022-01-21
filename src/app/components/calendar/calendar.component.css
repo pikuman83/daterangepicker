@@ -56,14 +56,13 @@ input::placeholder{
 }
 
 input:focus-visible{
-    outline: none;
-    border-bottom: solid 0.5px var(--main-color);
+    border: 0.5px solid var(--main-color)
 }
 
 .outline{
-    outline: none;
+    outline: #8B8B8B ;
     border-bottom: none;
-    border: 0.5px solid var(--main-color);
+    border: 0.5px solid #8B8B8B;
 }
 
 label{

@@ -21,25 +21,28 @@ export class CalendarBodyComponent implements AfterViewChecked{
     service.dateTo.subscribe(dT => this.dateTo = dT)
   }
 
+  /**
+   * Applied to control the state of the selected dates through var selectedDates coming from parent
+   */
   ngAfterViewChecked(): void{
-    if(this.dateFrom && this.dateTo && this.selectedDates){
-      const el = document.querySelectorAll('.dates');
-      Array.from(el).forEach(x => {
-        const date1 = new Date(this.cYear, this.cMonth, Number(x.innerHTML));
-        if (!x.classList.contains('inactive') && 
-            ((date1.getFullYear() === this.dateFrom?.getFullYear() && 
-            date1.getMonth() === this.dateFrom.getMonth() && 
-            date1.getDate() === this.dateFrom.getDate()) ||
-            (date1.getFullYear() === this.dateTo?.getFullYear() && 
-            date1.getMonth() === this.dateTo.getMonth() && 
-            date1.getDate() === this.dateTo.getDate()))){
-            x.classList.add('selectedCell')
-          }
-        if(!x.classList.contains('inactive') && date1 >= this.dateFrom! && date1 <= this.dateTo!){
-            x.classList.add('focus-active')
-        }
-      })
-    }
+    // if(this.dateFrom && this.dateTo && this.selectedDates){
+    //   const el = document.querySelectorAll('.dates');
+    //   Array.from(el).forEach(x => {
+    //     const date1 = new Date(this.cYear, this.cMonth, Number(x.innerHTML));
+    //     if (!x.classList.contains('inactive') && 
+    //         ((date1.getFullYear() === this.dateFrom?.getFullYear() && 
+    //         date1.getMonth() === this.dateFrom.getMonth() && 
+    //         date1.getDate() === this.dateFrom.getDate()) ||
+    //         (date1.getFullYear() === this.dateTo?.getFullYear() && 
+    //         date1.getMonth() === this.dateTo.getMonth() && 
+    //         date1.getDate() === this.dateTo.getDate()))){
+    //         x.classList.add('selectedCell')
+    //       }
+    //     if(!x.classList.contains('inactive') && date1 >= this.dateFrom! && date1 <= this.dateTo!){
+    //         x.classList.add('focus-active')
+    //     }
+    //   })
+    // }
   }
 
   isToday(row: number, date: number): boolean{
@@ -59,9 +62,17 @@ export class CalendarBodyComponent implements AfterViewChecked{
     return false
   }
   
-  // first click, select datefrom, second click, if old, datefrom, else, date to, third click, if both, dateto null, datefrom ok
+  /**
+   * Dates onClick behaviour
+   * First click, select dateFrom, second click (if old) select dateFrom else select dateTo
+   * third click, if both, select dateFrom and set dateTo to null
+   * @param date: clicked date
+   * @param row: row index to discard inactive (check if working by class:inactive is less expensive)
+   * @param e: clicked html element itself
+   */
   selectDates(date: number, row: number, e: Event){
-    
+
+    // make sure it only operates on active dates
     if (!this.isDisable(row, date)){
       
       const el = e.target as HTMLTableCellElement;
@@ -74,21 +85,25 @@ export class CalendarBodyComponent implements AfterViewChecked{
         this._clearFocus()
       }
 
-      if (this.dateFrom && !this.dateTo){
+      if (this.dateFrom && !this.dateTo && !el.classList.contains('inactive')){
         if (this._isNotOldDate(date)){
           this.service.dateTo.next(new Date(this.cYear, this.cMonth, date));
           el.classList.add('selectedCell');
+          el.parentElement?.classList.add('dateTo');
         }
         else{
+          this._clearFocus();
           this.service.dateFrom.next(new Date(this.cYear, this.cMonth, date));
           this.service.dateTo.next(null);
           el.classList.add('selectedCell');
+          el.parentElement?.classList.add('dateFrom');
         }
       }
       else{
         this.service.dateFrom.next(new Date(this.cYear, this.cMonth, date));
         this.service.dateTo.next(null);
         el.classList.add('selectedCell');
+        el.parentElement?.classList.add('dateFrom');
       }
     }
   }
@@ -101,26 +116,30 @@ export class CalendarBodyComponent implements AfterViewChecked{
   }
 
   _clearFocus(){
-    const el = document.querySelectorAll('.dates');
+    const el = document.querySelectorAll('td');
     Array.from(el).forEach(x => {
-      x.classList.remove('selectedCell', 'focus-active')
+      x.classList.remove('focus-active', 'dateFrom', 'dateTo')
+    });
+    const el1 = document.querySelectorAll('.dates');
+    Array.from(el1).forEach(x => {
+      x.classList.remove('selectedCell')
     })
   }
 
   /**
    * Highlight the area when datefrom is selected.
    * if checks are passed, the hovered date and all the dates prior to it until the dateFrom are highlighted
-   * @param row: the index of the hovered row | used to discard the disabled dates
+   * @param row: the index of the hovered row | used to discard the disabled dates1
    * @param date: the current hovered date
    * @param index: the current date in iteration 
    */
   isRange(row: number, date: number): void{
     if (this.dateFrom){
       if (!this.isDisable(row, date) && this._isNotOldDate(date) && !this.dateTo){
-        const el = document.querySelectorAll('.dates');
+        const el = document.querySelectorAll('td');
         for (let i = 0; i < el.length; i++){
           el[i].classList.remove('focus-active');
-          const index = Number(el[i].innerHTML);
+          const index = Number(el[i].firstElementChild?.innerHTML); //target parent element to give backgraound to it but identifying it from the child for rounding the first and th last date
           if (new Date(this.cYear, this.cMonth, index) >= this.dateFrom! && index <= date){
             if(!el[i].classList.contains('inactive'))
             el[i].classList.add('focus-active')

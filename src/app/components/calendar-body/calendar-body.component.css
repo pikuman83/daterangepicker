@@ -10,10 +10,9 @@ thead{
     color: var(--main-color);
 }
 
-th, td{
+th, .dates{
     width: 32px;
     height: 32px;
-    /* border-radius: 50%; */
 }
 
 tbody{
@@ -23,20 +22,26 @@ tbody{
     line-height: 16px;
 }
 
+.dates{
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.dates:hover{
+    border-radius: 50%;
+    border: 1px solid var(--main-color);
+}
+
 .inactive{
     color: gray;
     cursor: default;
 }
 
 .circle{
-    box-sizing: border-box;
     border: 1px solid var(--main-color);
-    border-radius: 50%;
-}
-
-.selected{
-    box-sizing: border-box;
-    background-color: var(--main-color);
     border-radius: 50%;
 }
 
@@ -44,13 +49,17 @@ tbody{
     background: rgba(13, 191, 249, 0.2);
 }
 
-.dates:hover{
-    box-sizing: border-box;
-    border-radius: 50%;
-    border: 1px solid var(--main-color);
-}
-
 .selectedCell{
     background-color: var(--main-color);
     border-radius: 50%;
+}
+
+.dateFrom{
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+}
+
+.dateTo{
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
 }

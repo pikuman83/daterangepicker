@@ -11,54 +11,60 @@
         <tr *ngFor="let c of calendar; let i = index" class="pointer">
 
             <!-- Each cell represents each column, and keeps track of indexes -->
-            <td class="dates" [class.inactive]="isDisable(i, c[0])" 
-                [class.circle]="isToday(i, c[0])"
+            <td [class.inactive]="isDisable(i, c[0])" 
                 (click)="selectDates(c[0], i, $event)"
                 (mouseover)="isRange(i, c[0])">
-                {{c[0]}}
+                <div class="dates" [class.circle]="isToday(i, c[0])">
+                    {{c[0]}}
+                </div>
             </td>
 
-            <td class="dates" [class.inactive]="isDisable(i, c[1])" 
-                [class.circle]="isToday(i, c[1])"
+            <td [class.inactive]="isDisable(i, c[1])" 
                 (click)="selectDates(c[1], i, $event)"
                 (mouseover)="isRange(i, c[1])">
-                {{c[1]}}
+                <div class="dates" [class.circle]="isToday(i, c[1])">
+                    {{c[1]}}
+                </div>
             </td>
 
-            <td class="dates" [class.inactive]="isDisable(i, c[2])" 
-                [class.circle]="isToday(i, c[2])"
+            <td [class.inactive]="isDisable(i, c[2])" 
                 (click)="selectDates(c[2], i, $event)"
                 (mouseover)="isRange(i, c[2])">
-                {{c[2]}}
+                <div class="dates" [class.circle]="isToday(i, c[2])">
+                    {{c[2]}}
+                </div>
             </td>
 
-            <td class="dates" [class.inactive]="isDisable(i, c[3])" 
-                [class.circle]="isToday(i, c[3])"
+            <td [class.inactive]="isDisable(i, c[3])" 
                 (click)="selectDates(c[3], i, $event)"
                 (mouseover)="isRange(i, c[3])">
-                {{c[3]}}
+                <div class="dates" [class.circle]="isToday(i, c[3])">
+                    {{c[3]}}
+                </div>
             </td>
 
-            <td class="dates" [class.inactive]="isDisable(i, c[4])" 
-                [class.circle]="isToday(i, c[4])"
+            <td [class.inactive]="isDisable(i, c[4])" 
                 (click)="selectDates(c[4], i, $event)"
                 (mouseover)="isRange(i, c[4])">
-                {{c[4]}}
+                <div class="dates" [class.circle]="isToday(i, c[4])">
+                    {{c[4]}}
+                </div>
             </td>
 
-            <td class="dates" [class.inactive]="isDisable(i, c[5])" 
-                [class.circle]="isToday(i, c[5])"
+            <td [class.inactive]="isDisable(i, c[5])" 
                 (click)="selectDates(c[5], i, $event)"
                 (mouseover)="isRange(i, c[5])">
-                {{c[5]}}
+                <div class="dates" [class.circle]="isToday(i, c[5])">
+                    {{c[5]}}
+                </div>
             </td>
 
-            <td class="dates" [class.inactive]="isDisable(i, c[6])" 
-                [class.circle]="isToday(i, c[6])"
+            <td [class.inactive]="isDisable(i, c[6])" 
                 (click)="selectDates(c[6], i, $event)"
                 (mouseover)="isRange(i, c[6])">
-                {{c[6]}}
-                <!-- <div class="abcde"></div> -->
+                <div class="dates" [class.circle]="isToday(i, c[6])">
+                    {{c[6]}}
+                </div>
             </td>
 
         </tr>

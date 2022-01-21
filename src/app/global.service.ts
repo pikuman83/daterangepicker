@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { getFirestore } from 'firebase/firestore';
+import { collection, addDoc } from "firebase/firestore";
+import { initializeApp } from 'firebase/app';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +15,6 @@ export class GlobalService {
   public dateTo = new Subject<Date|null>();
   public notify = new Subject<string>();
 
-  // constructor(private db: AngularFirestore){}
-
   runNotification(msg: string){
     this.notify.next('');
     this.notify.next(msg);
@@ -21,8 +23,14 @@ export class GlobalService {
     }, 3000);
   }
 
-  // create(path: string, data: any): any {
-  //   return this.db.collection(`/${path}`).add({ ...data });
-  // }
+  firebaseApp = initializeApp(environment.firebase);
+  db= getFirestore();
+  async create(path: string, data: any){
+    try {
+      await addDoc(collection(this.db, path), data);
+    } catch (e: any) {
+      this.runNotification(e.message);
+    }
+  }
 
 }
