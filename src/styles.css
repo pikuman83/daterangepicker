@@ -19,3 +19,17 @@ body {
 .pointer{
     cursor: pointer;
 }
+
+.closeBtn{
+    fill: white;
+}
+
+.closeBtn:hover{
+    fill: var(--main-color);
+    width: 16px;
+    height: 16px;
+}
+
+.mr-12{
+    margin-right: 12px;
+}

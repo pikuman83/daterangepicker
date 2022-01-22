@@ -10,9 +10,11 @@ thead{
     color: var(--main-color);
 }
 
-th, .dates{
-    width: 32px;
+th, td{
+    width: 34px;
     height: 32px;
+    text-align: center;
+    text-align: -webkit-center;;
 }
 
 tbody{
@@ -27,6 +29,8 @@ tbody{
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 28px;
+    height: 28px;
 
 }
 
@@ -36,7 +40,7 @@ tbody{
 }
 
 .inactive{
-    color: gray;
+    color: darkgray;
     cursor: default;
 }
 
@@ -51,6 +55,8 @@ tbody{
 
 .selectedCell{
     background-color: var(--main-color);
+    color: black;
+    font-weight: 500;
     border-radius: 50%;
 }
 

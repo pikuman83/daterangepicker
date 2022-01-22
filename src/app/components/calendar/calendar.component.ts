@@ -141,10 +141,11 @@ export class CalendarComponent implements OnInit {
   clear(){
     this.service.dateFrom.next(null);
     this.service.dateTo.next(null);
-    const el = document.querySelectorAll('td'); //strange, javascript can access dom of child component directly??
-    Array.from(el).forEach(e => e.classList.remove('focus-active', 'selectedCell'));
+    document.querySelectorAll('td').forEach(e => {
+      e.classList.remove('focus-active');
+      e.firstElementChild?.classList.remove('selectedCell')
+    });
   }
-
 
   sendToParent(){
     if (this.dateFrom && this.dateTo){
@@ -152,9 +153,6 @@ export class CalendarComponent implements OnInit {
       this.clear();
       this.service.popUp.next(true);
     }
-    // else{
-    //   this.service.runNotification('Kindly chose a date range first')
-    // }
   }
 
 }

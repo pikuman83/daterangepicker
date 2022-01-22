@@ -1,15 +1,13 @@
 .toolbar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
     height: 60px;
+    width: 100%;
     display: flex;
     align-items: center;
     background-color: #1976d2;
     color: white;
     font-weight: 600;
     justify-content: space-between;
+    z-index: 10;
 }
 
 .toolbar * {
@@ -18,23 +16,33 @@
 
 .content {
     display: flex;
-    margin: 82px auto 32px;
+    padding: 140px 16px 16px 16px;
     max-width: 960px;
-    height: calc(100% - 120px);
+    height: calc(100% - 60px);
     flex-direction: column;
     align-items: center;
     box-sizing: border-box;
     border-radius: 8px;
+    margin: 0 auto;
+    justify-content: center;
 }
 
-.card{
-    margin: 32px auto;
+app-calendar{
+    transform: rotateX(0deg); /*!important; rotate 90deg means normal view, transform 0deg means invisible (the latter is used in the upcoming class) */
+    transition: all .2s ease 0s; /* the effect, pushe it (push bcoz of transporm origin, this is just the motion strategy, contains no effect) towards the new position slowly */
+    transform-origin: 100% 0 0; /* makes the transition starts from the origin*/
+    z-index: 1;
+    content-visibility: visible;
+}
+.close{
+    transform: rotateX(90deg) !important;
+    content-visibility: hidden;
 }
 
 .calendar{
     width: 300px;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     color: var(--main-color);
     border-radius: 2px;
@@ -48,16 +56,97 @@
 }
 
 h2 {
-    margin: 8px;
+    margin: 8px 8px 8px 16px;
+
 }
 
-.open{
-    display: block;
+.card{
+    display: flex;
+    flex-direction: column;
+    margin: 16px auto;
+    width: 300px;
+    align-items: center;
+    color: var(--main-color);
+    border-radius: 2px;
+    background-color: var(--bg-color);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
-.close{
-    display: none;
+.dropdown{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 300px;
 }
+
+.dropdown-btn{
+    transition: all .5s ease 0s;
+}
+
+.dropdown-btn-toggle{
+    transform: rotate(0.5turn);
+}
+
+input, textarea{
+    border: none;
+    background: none;
+    border-bottom: solid 0.5px var(--main-color);
+    border-radius: 2px;
+    width: 250px;
+    letter-spacing: 1px;
+    margin: 14px 0;
+    color: white;
+    height: 60px;
+    box-sizing: border-box;
+    font-size: 14px;
+    overflow: hidden;
+}
+
+input::placeholder{
+    color: #8B8B8B;
+    font-size: 14px;
+    line-height: 22px;
+}
+
+input:focus-visible, textarea:focus-visible{
+    outline: none;
+}
+
+label{
+    align-self: left;
+    margin-top: 16px;
+    font-size: 12px;
+    line-height: 20px;
+}
+
+.action-bar{
+    text-align: end;
+    margin-bottom: 16px;
+}
+
+.label{
+    margin-top: 16px;
+    width: 250px;
+}
+
+button{
+    width: 50px;
+    height: 21px;
+    border: none;
+    color: white;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    background: none;
+    line-height: 21px;
+    margin: 8px 0;
+    cursor: pointer;
+}
+
+
+
+
 
 footer {
     display: flex;
@@ -65,6 +154,7 @@ footer {
     margin-top: auto;
     align-items: center;
     line-height: 20px;
+    margin-top: auto;
 }
 
 footer a {
@@ -88,36 +178,12 @@ footer a {
     background-color: var(--bg-color);
 }
 
-.notification{
+.noti-message{
     overflow: auto;
     margin-right: 20px;
     color: var(--main-color);
 }
-/* Responsive Styles */
-@media screen and (max-width: 767px) {
 
-}
 @media screen and (max-width: 575px) {
-    
-}
-
-
-.card1{
-    padding: 20px;
-    box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
-    display: flex;
-    flex-direction: column;
-    margin: 16px auto;
-}
-input{
-    border: none;
-    border-bottom: 1px solid blue;
-    margin-bottom: 20px;
-}
-button{
-    margin-bottom: 20px;
-    width: 80px;
-    align-self: center;
-    background: gray;
-    color: white;
+    /* take care of the mobile address bar */
 }

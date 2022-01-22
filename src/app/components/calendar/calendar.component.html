@@ -1,5 +1,5 @@
 <!-- The main class 'container' which wrappes the full calendar, absolute position and offset may apply -->
-<div class="container" [class.close]="hide">
+<div class="container">
 
     <div class="navBar">
         <span>Filter by date</span>
@@ -15,7 +15,7 @@
         Input elements are chosen to leave the edit option open for future use,
         2 way data binding and validations should apply -->
     <div class="inputs">
-        <label [class.hide]="!dateFrom" for="dateFrom">From</label>
+        <label [class.hide]="!dateFrom">From</label>
         <input type="text" placeholder="dd/mm/yyyy" 
             [value]="dateFrom|date:'dd/MM/y'" [class.outline]="dateFrom" readonly>
 
@@ -29,7 +29,7 @@
         
         <!-- Next and previous buttons svgs -->
         <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="pointer"
+            <svg xmlns="http://www.w3.org/2000/svg" class="pointer mr-12"
                 height="24px" viewBox="0 0 24 24" width="24px" fill="white" (click)="previous()">
                 <path d="M0 0h24v24H0V0z" fill="none"/><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z"/></svg>
             <svg xmlns="http://www.w3.org/2000/svg" class="pointer"
@@ -47,7 +47,7 @@
 
     <!-- buttons positioned to flex-end, ripple effect can be added to highlight click -->
     <footer>
-        <button (click)="clear()">Clear</button>
+        <button class="mr-12" (click)="clear()">Clear</button>
         <button (click)="sendToParent()" [class.inactive]="!dateTo">Apply</button>
     </footer>
 
