@@ -17,12 +17,6 @@ th, td{
     text-align: -webkit-center;
 }
 
-tr:active, tr:focus-within, tr:focus-visible, tr:hover,
-td:active, td:focus-within, td:focus-visible {
-    background: none;
-    outline: none;
-}
-
 tbody{
     display: block;
     text-align: center;
@@ -75,3 +69,8 @@ tbody{
     border-top-right-radius: 50%;
     border-bottom-right-radius: 50%;
 }
+/* tr:active, tr:focus-within, tr:focus-visible, tr:hover,
+td:active, td:focus-within, td:focus-visible {
+    background: none;
+    outline: none;
+} */

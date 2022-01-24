@@ -1,0 +1,47 @@
+<div class="card header2" (click)="dropdown = !dropdown">
+  <h2>Send reminder</h2>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    alt="dropdown logo"
+    class="mr-12 dropdown-btn"
+    height="24px"
+    viewBox="0 0 24 24"
+    width="24px"
+    fill="#1976d2"
+    [class.dropdown-btn-toggle]="dropdown">
+    <path d="M0 0h24v24H0V0z" fill="none" />
+    <path d="M7 10l5 5 5-5H7z" />
+  </svg>
+</div>
+
+<div [class.close-panel]="!dropdown" class="card card-body">
+  <div *ngIf="emailInput.value" class="label">Email</div>
+  <input type="email"
+    placeholder="Email"
+    required
+    email
+    [(ngModel)]="emailForm.email"
+    #emailInput="ngModel"/>
+
+  <div *ngIf="notesInput.value" class="label">Notes</div>
+  <textarea
+    placeholder="Additional notes"
+    [(ngModel)]="emailForm.notes"
+    [rows]="5"
+    #notesInput="ngModel">
+  </textarea>
+
+  <div class="action-bar">
+    <button
+      (click)="reset()"
+      [class.inactive]="!emailInput.value && !notesInput.value">
+      Reset
+    </button>
+
+    <button class="mr-12"
+      (click)="sendEmail(emailInput)"
+      [class.inactive]="emailInput.invalid || !dateFrom || !dateTo">
+      Send
+    </button>
+  </div>
+</div>

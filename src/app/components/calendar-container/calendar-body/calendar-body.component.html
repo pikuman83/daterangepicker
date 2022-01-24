@@ -1,15 +1,12 @@
 <table>
     <thead>
-    <tr>
-        <th *ngFor="let wd of weekDays">{{wd}}</th>
-    </tr>
+        <tr>
+            <th *ngFor="let wd of weekDays">{{wd}}</th>
+        </tr>
     </thead>
-
     <tbody>
-
         <!-- Loops the calender array containing 6 rows of 7 numbers -->
         <tr *ngFor="let c of calendar; let i = index" class="pointer">
-
             <!-- Each cell represents each column, and keeps track of indexes -->
             <td [class.inactive]="isDisable(i, c[0])" 
                 (click)="selectDates(c[0], i, $event)"
@@ -66,7 +63,6 @@
                     {{c[6]}}
                 </div>
             </td>
-
         </tr>
     </tbody>
 </table>

@@ -45,7 +45,8 @@ export class GlobalService {
     }),
   };
 
-  get(month: number, day:number): Observable<any> {
+  // This call can be can be made for limited number of returned items
+  get(month: number = 3, day:number = 3): Observable<any> {
     return this.http.get<any>(`${this.url}/${month}/${day}`, this.httpOptions)
   }
 

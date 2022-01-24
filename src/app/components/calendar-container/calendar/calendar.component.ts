@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { GlobalService } from 'src/app/global.service';
 
 @Component({
@@ -8,8 +8,6 @@ import { GlobalService } from 'src/app/global.service';
 })
 export class CalendarComponent implements OnInit {
 
-  @Output() datesEvent = new EventEmitter<any>(); // Emit the selected dates to the app component
-  hide = true; //bound to child component through service, closes the calendar
   cYear = new Date().getFullYear(); //keep track of the current year
   cMonth = new Date().getMonth(); //keep track of the current month
   displayMonth!: Date; // value is given on calendar generation
@@ -18,23 +16,21 @@ export class CalendarComponent implements OnInit {
   calendar: Array<Array<number>> = []; //calendar body array (contains all the dates)
   selectedDates = false;
 
-  // injects the service holding "Rxjs subjects" to handle app state
+  // injects the service's "Rxjs subjects" to handle the app state
   constructor(public service: GlobalService) {
-    service.popUp.subscribe(hide => this.hide = hide);
     service.dateFrom.subscribe(dF => this.dateFrom = dF)
     service.dateTo.subscribe(dT => this.dateTo = dT)
   }
 
   ngOnInit(): void {
     this.createCalendar(this.cYear, this.cMonth); 
-    console.log(new Date() < new Date(2022, 0, 20))
   }
 
   /**
-   * Main function, generate the calendar.
-   * @param year, number type value, initialized with current year, 
+   * Generate the calendar.
+   * @param year: initialized with current year, 
    * later on provided by next() and previous() function.
-   * @param month, number type value, initialized with current year, 
+   * @param month: initialized with current month, 
    * later on provided by next() and previous() function.
    */
   createCalendar(year: number, month: number){
@@ -42,8 +38,6 @@ export class CalendarComponent implements OnInit {
     this.calendar = [];
     this.cYear = year;
     this.cMonth = month;
-
-    //because 'datepipe' doesn't detect changes on this.cMonth update
     this.displayMonth = new Date(year, month);
     
     // 0 - 6 (Monday - Sunday)
@@ -145,14 +139,6 @@ export class CalendarComponent implements OnInit {
       e.classList.remove('focus-active');
       e.firstElementChild?.classList.remove('selectedCell')
     });
-  }
-
-  sendToParent(){
-    if (this.dateFrom && this.dateTo){
-      this.datesEvent.emit({dF:this.dateFrom, dT:this.dateTo});
-      this.clear();
-      this.service.popUp.next(true);
-    }
   }
 
 }

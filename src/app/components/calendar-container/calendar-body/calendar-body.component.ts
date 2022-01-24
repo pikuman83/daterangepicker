@@ -1,4 +1,4 @@
-import {AfterViewChecked, Component, Input, OnInit} from '@angular/core';
+import {AfterViewChecked, Component, Input} from '@angular/core';
 import { GlobalService } from 'src/app/global.service';
 
 @Component({
@@ -7,7 +7,7 @@ import { GlobalService } from 'src/app/global.service';
   styleUrls: ['./calendar-body.component.css'],
 })
 
-export class CalendarBodyComponent implements OnInit, AfterViewChecked {
+export class CalendarBodyComponent implements AfterViewChecked {
 
   @Input() cYear!: number;
   @Input() cMonth!: number;
@@ -22,15 +22,10 @@ export class CalendarBodyComponent implements OnInit, AfterViewChecked {
     service.dateTo.subscribe((dT) => (this.dateTo = dT));
   }
 
-  ngOnInit(): void {
-      console.log('Oninit')
-  }
-
   /**
    * Applied to control the state of the selected dates through var selectedDates coming from parent
    */
   ngAfterViewChecked(): void {
-    console.log('after view checked')
     if (this.dateFrom && this.dateTo && this.selectedDates) {
       const el = document.querySelectorAll('.dates');
       Array.from(el).forEach((x) => {
@@ -99,7 +94,6 @@ export class CalendarBodyComponent implements OnInit, AfterViewChecked {
 
     // make sure it only operates on active dates
     if (!this.isDisable(row, date) && el.nodeName === 'DIV') {
-      // console.log(el)
 
       if (this.dateTo || (!this.dateFrom && !this.dateTo)) this._clearFocus();
 

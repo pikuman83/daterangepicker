@@ -1,35 +1,110 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap");
 
 :root {
-    --main-color: #0DBFF9;
-    --bg-color: #051C2A;
+  --main-color: #0dbff9;
+  --bg-color: #051c2a;
 }
-html, body { height: 100%; overflow-x: hidden; }
-body { 
-    margin: 0; 
-    font-family: 'Poppins', sans-serif;
-    font-size: 14px;
-    color: #333;
-    box-sizing: border-box;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale; 
+html,
+body {
+  height: 100%;
+  overflow-x: hidden;
 }
-
-.pointer{
-    cursor: pointer;
-}
-
-.closeBtn{
-    fill: white;
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  color: #333;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.closeBtn:hover{
-    fill: var(--main-color);
-    width: 16px;
-    height: 16px;
+h2 {
+  margin: 8px 8px 8px 16px;
 }
 
-.mr-12{
-    margin-right: 12px;
+.pointer {
+  cursor: pointer;
+}
+
+.closeBtn {
+  fill: white;
+}
+
+.closeBtn:hover {
+  fill: var(--main-color);
+  width: 16px;
+  height: 16px;
+}
+
+.mr-12 {
+  margin-right: 12px;
+}
+
+.card {
+  width: 300px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 2px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+/*   flex-direction: column;
+  margin: 16px auto;
+  background-color: var(--bg-color); */
+
+.header1{
+  color: var(--main-color);
+  margin-bottom: 16px;
+}
+
+.header2{
+  background-color: #61CE70;
+  color: white;
+}
+
+.header3{
+  margin-top: 16px;
+  background-color: var(--main-color);
+  color: var(--bg-color);
+}
+
+.header1:hover, .header2:hover, .header3:hover {
+  background-color: var(--bg-color);
+  color: var(--main-color);
+}
+
+.card-body {
+  flex-direction: column;
+  margin-bottom: 16px;
+  color: var(--main-color);
+  background-color: var(--bg-color);
+  /* transition: height 225ms cubic-bezier(0.4, 0, 0.2, 1); */
+}
+
+.dropdown {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 300px;
+}
+
+.dropdown-btn {
+  transition: all 0.5s ease 0s;
+}
+
+.dropdown-btn-toggle {
+  transform: rotate(0.5turn);
+}
+
+.m16{
+  margin: 16px;
+}
+
+.fact{
+  text-align: center;
+  color: white;
 }

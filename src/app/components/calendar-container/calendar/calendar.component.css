@@ -1,9 +1,8 @@
-/* Fix, make the parent, relative to make this absolute relative to the parent */
 .container{
     box-sizing: border-box;
     padding: 8px 24px;
     border-radius: 4px;
-    margin-top: -50px;
+    margin-top: -130px;
     background-color: var(--bg-color);
     color: white;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);

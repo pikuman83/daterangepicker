@@ -1,69 +1,29 @@
-<!-- Remember to fix mobile top bar height -->
-<!-- Toolbar -->
+
+<!-- change calendar class by card -->
+<!-- give margin 16 auto to app-calendar-container and refix calendar top -->
+
 <div class="toolbar" role="banner">
   <img width="100" alt="Unblur Logo" src="../assets/logo_b.png" />
   <span>Welcome</span>
 </div>
 
 <div class="content" role="main">
-  <div class="calendar pointer" (click)="service.popUp.next((hide = !hide))">
-    <h2>Schedule an Event</h2>
-    <svg xmlns="http://www.w3.org/2000/svg" alt="Calendar logo" class="mr-12"
-      height="24px" viewBox="0 0 24 24" width="24px" fill="#1976d2">
-      <path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/>
-    </svg>
-  </div>
 
-  <app-calendar (datesEvent)="dateFrom=$event.dF;dateTo=$event.dT" [class.close]="hide"></app-calendar>
+  <!-- The card with title to open the calendar -->
+  <app-calendar-container (click)="service.popUp.next((hide = !hide))"></app-calendar-container>
 
-  <div class="card" > 
+  <!-- The calendar itself with calendar-body as children -->
+  <app-calendar [class.close]="hide"></app-calendar>
 
-    <div class="calendar pointer" (click)="dropdown=!dropdown">
-      <h2>Send reminder</h2>
-      <svg xmlns="http://www.w3.org/2000/svg" alt="dropdown logo" class="mr-12 dropdown-btn"
-        height="24px" viewBox="0 0 24 24" width="24px" fill="#1976d2"
-        [class.dropdown-btn-toggle]="dropdown">
-        <path d="M0 0h24v24H0V0z" fill="none"/><path d="M7 10l5 5 5-5H7z"/></svg>
-    </div>
-
-    <div *ngIf="dropdown" class="card">
-      <div *ngIf="emailInput.value" class="label">Email</div>
-      <input type="email" placeholder="Email" required email
-        [(ngModel)]="emailForm.email"
-        #emailInput="ngModel"/>
-
-      <div *ngIf="notesInput.value" class="label">Notes</div>
-      <textarea placeholder="Additional notes" [(ngModel)]="emailForm.notes"[rows]="5"
-        #notesInput="ngModel"></textarea>
-
-      <div class="action-bar">
-        <button class="mr-12" (click)="sendEmail(emailInput)">Send</button>
-        <button (click)="reset()" [disabled]="!emailInput.value || notesInput.value">Reset</button>
-      </div>
-    </div>
-  </div>
-
-  <footer>
-    <!-- Links -->
-    <app-contact></app-contact>
-    Liked the Demo?&nbsp;
-    <a href="https://pikuman.dev" target="_blank" rel="noopener">
-      Check my portfolio</a>
-  </footer>
+  <!-- A card containing a form to send email (firebase, sendgrid, nodemailer) -->
+  <app-reminder></app-reminder>
+  
+  <!-- Represents data from a mock http call -->
+  <app-onthisday></app-onthisday>
+  <!-- Contact links -->
+  <app-contact class="footer"></app-contact>
+  
 </div>
 
 <!-- Globally available notification bar -->
-<div class="notify" *ngIf="notification">
-  <span class="noti-message">{{ notification }}</span>
-
-  <!-- Close button svg-->
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 14 14"
-    xmlns="http://www.w3.org/2000/svg"
-    class="pointer closeBtn"
-    (click)="service.notify.next('')">
-    <path d="M13.295 0.705C12.9056 0.315639 12.2744 0.315639 11.885 0.705L7 5.59L2.115 0.705C1.72564 0.315639 1.09436 0.315639 0.705 0.705C0.315639 1.09436 0.315639 1.72564 0.705 2.115L5.59 7L0.705 11.885C0.315639 12.2744 0.315639 12.9056 0.705 13.295C1.09436 13.6844 1.72564 13.6844 2.115 13.295L7 8.41L11.885 13.295C12.2744 13.6844 12.9056 13.6844 13.295 13.295C13.6844 12.9056 13.6844 12.2744 13.295 11.885L8.41 7L13.295 2.115C13.6844 1.72564 13.6844 1.09436 13.295 0.705Z"/>
-  </svg>
-</div>
+<app-snackbar></app-snackbar>
