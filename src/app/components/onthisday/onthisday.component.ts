@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { GlobalService } from 'src/app/global.service';
 
 @Component({
@@ -6,28 +6,33 @@ import { GlobalService } from 'src/app/global.service';
   templateUrl: './onthisday.component.html'
 })
 
-export class OnthisdayComponent implements OnInit {
+export class OnthisdayComponent {
 
   dropdown = false;
-  dateFrom: Date|null = new Date(2020, 3, 2);
+  dateFrom!: Date | null;
   facts!: any;
-  
+
   constructor(private service: GlobalService) {
-    service.dateFrom.subscribe(dF => {
+    this.service.dateFrom.subscribe(dF => {
       this.dateFrom = dF;
-      this.onThisDay()
+      if (dF) this.onThisDay()
     });
-   }
+  }
 
-  ngOnInit(): void {this.onThisDay()}
-
-  onThisDay(){
-    if(this.dateFrom){
-      this.service.get(this.dateFrom.getMonth() + 1, this.dateFrom.getDate())
-        .subscribe((x:any) => {
-          this.facts = x.selected[0];
-      })
-    }
+  /**
+   * Calls a public api through the get method on service.
+   * The api retruns an array of random facts related to that date
+   */
+  onThisDay() {
+    this.service.get(this.dateFrom!.getMonth() + 1, this.dateFrom!.getDate())
+      .subscribe((x: any) => {
+        if (x && x.selected) {
+          const index = Math.floor(Math.random() * x.selected.length);
+          this.facts = x.selected[index];
+        }
+      }), (err: Error) => {
+        this.service.runNotification(err.message)
+      }
   }
 
 }

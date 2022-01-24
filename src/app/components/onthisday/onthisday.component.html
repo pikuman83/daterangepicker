@@ -20,3 +20,7 @@
   <span class="m16 fact">{{facts.text}}</span>
   <span style="margin-bottom: 16px;">{{facts.year}}</span>
 </div>
+
+<div class="card card-body fact p16" *ngIf="dropdown && !facts">
+  Choose a date to see random facts related to it
+</div>

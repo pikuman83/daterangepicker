@@ -104,6 +104,11 @@ h2 {
   margin: 16px;
 }
 
+.p16{
+  box-sizing: border-box;
+  padding: 16px;
+}
+
 .fact{
   text-align: center;
   color: white;

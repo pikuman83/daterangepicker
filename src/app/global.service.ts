@@ -40,8 +40,7 @@ export class GlobalService {
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'User-Agent': 'DateRangePicker/ Technical test for Unblur wahab_anjum@hotmail.com'
+      'Accept': 'application/json'
     }),
   };
 
