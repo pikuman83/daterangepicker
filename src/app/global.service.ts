@@ -35,8 +35,8 @@ export class GlobalService {
       this.runNotification(e.message);
     }
   }
-  url = 'https://en.wikipedia.org/api/rest_v1/feed/onthisday/selected';
   
+
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
@@ -44,7 +44,8 @@ export class GlobalService {
     }),
   };
 
-  // This call can be can be made for limited number of returned items
+  url = 'https://en.wikipedia.org/api/rest_v1/feed/onthisday/selected';
+  
   get(month: number = 3, day:number = 3): Observable<any> {
     return this.http.get<any>(`${this.url}/${month}/${day}`, this.httpOptions)
   }

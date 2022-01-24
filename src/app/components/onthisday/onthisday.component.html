@@ -1,7 +1,6 @@
 <div class="card header3" (click)="dropdown = !dropdown">
   <h2>Special Facts</h2>
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
+  <svg xmlns="http://www.w3.org/2000/svg"
     alt="dropdown logo"
     class="mr-12 dropdown-btn"
     height="24px"
@@ -15,10 +14,14 @@
 </div>
 
 <div *ngIf="dropdown && facts" class="card card-body">
-  <img class="m16" [src]="facts.pages[0].originalimage.source" width="200" alt="Image of old random fact on this day">
-  <span>{{facts.pages[0].displaytitle}}</span>
-  <span class="m16 fact">{{facts.text}}</span>
-  <span style="margin-bottom: 16px;">{{facts.year}}</span>
+  <img *ngIf="facts.pages[0].originalimage"
+    class="m16"
+    [src]="facts.pages[0].originalimage.source"
+    width="200"
+    alt="Image of old random fact on this day"/>
+  <span>{{ facts.pages[0].displaytitle }}</span>
+  <span class="m16 fact">{{ facts.text }}</span>
+  <span style="margin-bottom: 16px">{{ facts.year }}</span>
 </div>
 
 <div class="card card-body fact p16" *ngIf="dropdown && !facts">
