@@ -73,8 +73,6 @@ export class ReminderComponent {
   reset(){
     this.emailForm.email = ''; 
     this.emailForm.notes = '';
-    this.service.dateFrom.next(null);
-    this.service.dateTo.next(null)
   }
 
 }

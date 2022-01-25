@@ -22,7 +22,8 @@ export class OnthisdayComponent {
 
   /**
    * Calls a public api through the get method on service.
-   * The api retruns an array of random facts related to that date
+   * The api retruns an array of random facts related to that date.
+   * Different loading strategies can be applied, but the most standard one is used due to lack of time.
    */
   onThisDay() {
     this.service.get(this.dateFrom!.getMonth() + 1, this.dateFrom!.getDate())
