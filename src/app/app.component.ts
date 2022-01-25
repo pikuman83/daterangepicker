@@ -22,18 +22,11 @@ export class AppComponent {
     }
   }
 
-}
+  @HostListener('click', ['$event']) backDrop(e: any){
+    const el = e.target as HTMLElement;
+    if (el && el.classList.value === 'content'){
+        this.service.popUp.next(true);
+    }
+  }
 
-// clicking on app anywhere which doesnt contain app-calendar should close the calendar
-// closeOnClick = 0;
-//   @HostListener('click', ['$event']) offsetClose(e: any){
-//     const x = e.target as HTMLElement;
-//     console.log(e.composedPath().includes('app-calendar'));
-//     if (!this.hide){
-//       this.closeOnClick ++
-//       if (this.closeOnClick === 2){
-//         this.service.popUp.next(true);
-//         this.closeOnClick = 0;
-//       }
-//     }
-//   }
+}

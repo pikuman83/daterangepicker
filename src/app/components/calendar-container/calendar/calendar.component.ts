@@ -11,10 +11,10 @@ export class CalendarComponent implements OnInit {
   cYear = new Date().getFullYear(); //keep track of the current year
   cMonth = new Date().getMonth(); //keep track of the current month
   displayMonth!: Date; // value is given on calendar generation
-  dateFrom!: Date|null; // bound to other components through service
-  dateTo!: Date|null; // bound to other components through service
-  calendar: Array<Array<number>> = []; //calendar body array (contains all the dates)
-  selectedDates = false;
+  dateFrom!: Date|null; // available in the whole app, tracks the first selected date
+  dateTo!: Date|null; // available in the whole app, tracks the second selected date
+  calendar: Array<Array<number>> = []; //calendar body array (7 x 6)
+  selectedDates = false; // used to control the state during navigation
 
   // injects the service's "Rxjs subjects" to handle the app state
   constructor(public service: GlobalService) {
@@ -56,7 +56,7 @@ export class CalendarComponent implements OnInit {
 
   /**
    * check how many days in a month, Logic => Creating date with 32 as day, returns the first dates of 
-   * the next month, i.e; 1st of februrary if we enquire for january, then eliminating 1 from it returns 
+   * the next month, i.e; (1) of februrary if we enquire for january, then (32 - 1) returns 
    * 31 (january) and all the months work in this way successivly.
    * code taken (partially) from * https://dzone.com/articles/determining-number-days-month
    * @param year : number
@@ -74,6 +74,13 @@ export class CalendarComponent implements OnInit {
       return {currentMonth, lastMonth}
   }
 
+  /**
+   * Determines the starting point of the calendar which depends on the weeday of the month to render and
+   * total number of days in the last month.
+   * @param weekday: the index of the 1st weekday of the month to render
+   * @param previousMonth: total number of days in the last month 
+   * @returns the first date to render in the calendar (from the last month, i.e; 26) and 
+   */
   _getStartingPoint(weekday: number, previousMonth: number){
     let start = 0;
     let wd = 0;
@@ -88,6 +95,12 @@ export class CalendarComponent implements OnInit {
     }
     return {start, wd};
   }
+
+  /**
+   * 
+   * @param startingPoint: {st} 
+   * @param numbreOfdays: total number of days in the month to render
+   */
 
   _buildCalendar(startingPoint: any, numbreOfdays: any){
     let date = 1;
@@ -117,6 +130,8 @@ export class CalendarComponent implements OnInit {
     this.cYear = this.cMonth === 11 ? this.cYear + 1 : this.cYear;
     this.cMonth = (this.cMonth + 1) % 12; //remainder: limits the number under 12
     this.createCalendar(this.cYear, this.cMonth);
+    // if dates were already selected, the child component will check if they belongs to this month
+    // to reactivate the relavant classes
     if(this.dateFrom && this.dateTo){
       this.selectedDates = true;
     }
@@ -127,6 +142,8 @@ export class CalendarComponent implements OnInit {
     this.cYear = this.cMonth === 0 ? this.cYear - 1 : this.cYear;
     this.cMonth = this.cMonth === 0 ? 11 : this.cMonth - 1;
     this.createCalendar(this.cYear, this.cMonth);
+    // if dates were already selected, the child component will check if they belongs to this month
+    // to reactivate the relavant classes
     if(this.dateFrom && this.dateTo){
         this.selectedDates = true;
     }

@@ -2,9 +2,9 @@
 
 The project is created as a technical test for Unblur. Represents 3 functionalities.
 
-** A calendar with date range selection facility.**
-** A card which receives the selected dates and allow to email it to a given address. **
-** A card which shows a random fact occured on the first selected date. **
+* A calendar with date range selection facility.
+* A card which receives the selected dates and allow to email it to a given address.
+* A card which shows a random fact occured on the first selected date.
 
 https://drpicker.netlify.app
 
@@ -30,9 +30,9 @@ https://drpicker.netlify.app
 ## Components & Services
 #### GlobalService:
 
-    *Initialize firebase backend app to post data to the FireStore, which is configured to trigger email, automatically on a new entry using firebase functions with nodemailer & sendGrid SMTP.*
-    *Call a public api with httpClient and Observable which returns a stream of random facts from wikipedia.*
-    *Handles the app state, setting observers to the variables and letting them to be subscribed from different components during the full lifecycle of the whole app using Rxjs Subjects.*
+    - Initialize firebase backend app to post data to the FireStore, which is configured to trigger email, automatically on a new entry using firebase functions with nodemailer & sendGrid SMTP.
+    - Call a public api with httpClient and Observable which returns a stream of random facts from wikipedia.
+    - Handles the app state, setting observers to the variables and letting them to be subscribed from different components during the full lifecycle of the whole app using Rxjs Subjects.
 
 #### CalendarContainer: 
 

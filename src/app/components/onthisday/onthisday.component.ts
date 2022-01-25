@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component } from '@angular/core';
 import { GlobalService } from 'src/app/global.service';
 
 @Component({
@@ -16,6 +16,7 @@ export class OnthisdayComponent {
     this.service.dateFrom.subscribe(dF => {
       this.dateFrom = dF;
       if (dF) this.onThisDay()
+      else this.facts = null;
     });
   }
 

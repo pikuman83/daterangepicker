@@ -31,7 +31,6 @@ tbody{
     justify-content: center;
     width: 28px;
     height: 28px;
-
 }
 
 .dates:hover{
@@ -69,8 +68,10 @@ tbody{
     border-top-right-radius: 50%;
     border-bottom-right-radius: 50%;
 }
-/* tr:active, tr:focus-within, tr:focus-visible, tr:hover,
-td:active, td:focus-within, td:focus-visible {
-    background: none;
-    outline: none;
-} */
+
+/* Cursor pointer on small screen cause issue of activating row */
+@media screen and (max-width: 900px) {
+    .dates{
+        cursor: default;
+    }
+}
